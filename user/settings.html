@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizare Profil</title>
+    <link rel="stylesheet" href="user.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Actualizare Profil</h2>
+        <form>
+            <div class="input-group">
+                <label for="nume">Nume:</label>
+                <input type="text" id="nume" name="nume" required>
+            </div>
+            <div class="input-group">
+                <label for="prenume">Prenume:</label>
+                <input type="text" id="prenume" name="prenume" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Adresa de email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="parola">Parola nouă:</label>
+                <input type="password" id="parola" name="parola">
+            </div>
+            <div class="input-group">
+                <label for="confirmare_parola">Confirmare parola nouă:</label>
+                <input type="password" id="confirmare_parola" name="confirmare_parola">
+            </div>
+            <div class="input-group">
+                <label for="varsta">Vârstă:</label>
+                <input type="number" id="varsta" name="varsta" min="1" required>
+            </div>
+            <div class="input-group">
+                <label for="gen">Gen:</label>
+                <select id="gen" name="gen" required>
+                    <option value="">Alegeți genul</option>
+                    <option value="masculin">Masculin</option>
+                    <option value="feminin">Feminin</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="oras">Oraș:</label>
+                <input type="text" id="oras" name="oras" required>
+            </div>
+            <div class="input-group">
+                <label for="tara">Țară:</label>
+                <input type="text" id="tara" name="tara" required>
+            </div>
+            <div class="input-group">
+                <label for="regim_alimentar">Regim alimentar:</label>
+                <select id="regim_alimentar" name="regim_alimentar" required>
+                    <option value="">Alegeți regimul alimentar</option>
+                    <option value="carnivor">Carnivor</option>
+                    <option value="omnivor">Omnivor</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="raw-vegan">Raw-Vegan</option>
+                    <option value="pescatarian">Pescatarian</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="alergii">Alergii:</label>
+                <input type="text" id="alergii" name="alergii" placeholder="Ex. gluten, lactoză">
+            </div>
+            <div class="input-group">
+                <label for="preferinte">Preferințe culinare:</label>
+                <input type="text" id="preferinte" name="preferinte" placeholder="Ex. italian, asiatic">
+            </div>
+            <button type="submit">Actualizează Profil</button>
+        </form>
+    </div>
+</body>
+</html>
+    
