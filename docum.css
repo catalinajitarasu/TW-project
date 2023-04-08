@@ -1,0 +1,14 @@
+body{
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+article header h2{
+    text-align: left;
+    font-family: serif;
+    font-size: 50px;
+}
+
+h2{
+    margin-top: 5%;
+}
