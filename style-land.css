@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Work Sans', sans-serif;
+}
+
+#header {
+    width: 100%;
+    min-height: 100vh;
+    background-image: url(bckG.png);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+#header .nav {
+    width: 100%;
+    display: flex;
+    padding: 2% 6%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#header .nav img {
+    width: 150px;
+}
+
+#header .nav-links {
+    flex: 1;
+    text-align: right;
+}
+
+#header .nav-links ul li {
+    list-style: none;
+    display: inline-block;
+    padding: 2% 6%;
+    position: relative;
+}
+
+#header .nav-links ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 130%;
+}
+
+#header .nav-links ul li::after {
+    content: '';
+    width: 0%;
+    height: 2px;
+    background: #701e2e;
+    display: block;
+    margin: auto;
+    transition: 0.5s;
+}
+
+#header .nav-links ul li:hover::after {
+    width: 100%;
+}
+
+#text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#text div {
+    padding: 10% 15%;
+}
+
+#text parte2 {
+    color: rgb(255, 248, 248);
+    text-decoration: none;
+    font-size: 130%;
+}
+
+#text h1 {
+    color: #fff;
+    text-decoration: none;
+    font-size: 150%;
+}
+
+#text h2 {
+    color: #fff;
+    text-decoration: none;
+    font-size: 120%;
+}
+
+#text h3 {
+    color: #fff;
+    text-decoration: none;
+    font-size: 110%;
+}
+
+input[type=text] {
+    padding: 0;
+    position: relative;
+    width: 130px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    bottom: 2px;
+    left: 50px;
+    right: 0;
+    top: 4px;
+}
+
+input[type=text]:focus {
+    width: 100%;
+    position: relative;
+    bottom: 2px;
+    left: 30px;
+    right: 10px;
+    top: 4px;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(rgba(30, 30, 30, 0.85), rgba(28, 26, 26, 0.85)), url(food.jpg);
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
