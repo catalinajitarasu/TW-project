@@ -7,6 +7,7 @@
     font-family: 'Square Peg', cursive;
     transition: all 0.3s linear;
 }
+
 #header {
     width: 100%;
 
@@ -59,16 +60,7 @@
 }
 
 #text div {
-  flex-wrap: wrap;
-  flex-direction: row;
-}
-
-#text parte2 {
-    padding: 15%;
-    color: rgb(255, 248, 248);
-    text-decoration: none;
-  align-content: center;
-    font-size: 170%;
+  flex-flow: wrap row;
 }
 
 #text h1 {
@@ -95,15 +87,9 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(rgba(30, 30, 30, 0.85), rgba(28, 26, 26, 0.85)), url(food.jpg);
+    background-image: linear-gradient(rgba(30 30 30 / 85%), rgba(28 26 26 / 85%)), url("food.jpg");
     background-position: center;
     background-size: cover;
     position: relative;
 }
-@media screen and (max-with: 720px){
-#text div {
-    padding: 10% 15%;
-  flex-wrap: wrap;
-  flex-direction: column;
-}
-}
+
