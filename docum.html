@@ -140,8 +140,10 @@
     </section>
     <section id="domeniul1">
       <h3>1.4 Domeniul de aplicare al produsului</h3>
-      <p>Aplicatia WEB are scopul de a crea o interfata digitala, usor de folosit de catre toti utilizatorii, 
-        iar cei interesați ......
+      <p>Aplicatia WEB "Food Smart Web Organizer" are scopul de a crea o interfata digitala, usor de folosit de catre toti utilizatorii, 
+        in care utilizatorii pot comanda diverse alimente sau doar le pot adauga la favorite pentru a le comanda mai tarziu.
+        Un utilizator poate adauga si propriul sau aliment, sau poate face parte dintr-un grup in functie de preferintele sau alergiile pe care le are.
+        Aplicatia ofera si posibilitatea descarcarii unor statistici cu privire la cele mai apreciate alimente(cele mai des adaugate la favorite de catre utilizator sau cele mai cumparate de catre utilizatori).
       </p>
     </section>
     <section id="referinte1">
@@ -162,10 +164,9 @@
   <h2>Descrierea generala a aplicatiei</h2>
     <section id="perspectiva2">
       <h3>2.1 Perspectiva produsului</h3>
-      <p>.......
+      <p>FoSO (Food Web Smart Organizer) este o aplicatie Web care realizeaza managementul preferintelor unei persoane sau a unui grup de persoane in ceea ce priveste consumul alimentelor. Aceasta ofera suport si pentru gestiunea altor datelor aferente precum categorie, pret, ingrediente, imagini, restrictii (e.g., alergeni, regim special) si altele.
       </p> 
-      <p>
-        ............. <a href="#AppendixA"> Anexa A</a>
+      <p>O diagrama a aplicației se paote regăsi în cadrul secțiunii <a href="#AppendixA"> Anexa A</a>
       </p>
     </section>
     <section id="functii2">
@@ -175,16 +176,21 @@
         <ul>
           <li> să îsi creeze cont;</li>
           <li> să se conecteze la un cont deja existent;</li>
-          <li> ......</li>
-          <li> ....... </li>
-          
+          <li>isi poate modifica datele personale introduse la inregistrarea pe site</li>
+          <li> daca nu doreste sa isi creeze cont, acesta poate viziona produsele de pe site;</li>
+          <li> poate adauga propriile sale produse;</li>
+          <li>se poate alatura unui grup in functie de preferintele sale;</li>
+          <li>poate comanda produse sau doar sa le adauge la favorite;</li>
+          <li>poate sa descarce statistici in format CSV sau PDF despre cele mai cumparate alimente sau produsele preferate;</li>
+
         </ul>
       </div>
     </section>
     <section id="caracteristici2">
       <h3>2.3 Clasele si caracteristicile utilizatorilor </h3>
-      <p> Aplicatia este destinata oricarei persoane ce va fi interesată.........
-        </p>
+      <p> Aplicatia este destinata oricarei persoane ce va fi interesată, insa principalii utilizatri sunt cei care doresc sa comande mai usor alimente, sau isi doressc sa fie mai bine organizati si sa afle informatii intr-un mod cat mai usor despre diverse produse alimentare.
+        Un utilizator nu trebuie sa îndeplinească anumite caracteristici pentru a putea folosi platforma, aceasta poate fi folosita și doar în scop informativ, 
+        fară a fi forțați sa comande, sa se alature unui grup etc.</p>
     </section>
     <section id="mediu-operare2">
       <h3>2.4 Mediul de operare</h3>
@@ -192,7 +198,7 @@
     </section>
     <section id="constrangeri2">
       <h3>2.5 Constrangeri de proiectare si implementare</h3>
-      <p>Aplicatia este construita de la 0, fara utilizarea vreunui framework, utilizand doar cod HTML, CSS, JavaScript și pt backend???</p>
+      <p>Aplicatia este construita de la 0, fara utilizarea vreunui framework, utilizand doar cod HTML, CSS, JavaScript și Node.js.</p>
     </section>
     <section id="documentatie2">
       <h3>2.6 Documentatia utilizatorului</h3>
@@ -202,7 +208,7 @@
       <h3>2.7 Ipoteze si dependente</h3>
       <p>
         Singurul factor de care depinde aplicația pentru o bună utilizare este conexiunea la o sursă de internet.
-        Formatul CSV .........
+        Formatul CSV si PDF al statisticilor depinde de memoria dispozitivului deoarece acesta este disponibil doar prin descărcare.
       </p>
     </section>
 </section>
@@ -210,26 +216,24 @@
   <h2>Cerinte de interfata externa</h2>
   <section id="interfata-utilizator3" role="external-interface-requirments-sections">
     <h3>3.1 Interfata cu utilizatorul</h3>
-    <p>........</p>
-    <p> Pagina de login ofera utilizatorului optiunea de a se conecta sau de a crea un cont nou. </p>
-    <p> .........</p>
-    <p>Bara de activități a paginii principale conție: </p>
+    <p>Prima pagina are scopul de a redirectiona utilizatorul spre alte doua pagini: una numita "main-page" care reprezinta introducerea spre site-ul aplicatiei noastre, si un alt buton numit "documentation" care redirectioneaza utilizatorul spre o documentatie cu privire la aplicatie. </p>
+    <p>Main-page de asemenea poate redirectiona utilizatorul fie spre o pagina in care este prezentata cat mai bine formatul site-ului avand scopul de a oferi userului cateva date precum produsele disponibile pe site.
+      Sau, de asemenea, utilizatorul isi poate crea un con, sau sa se conecteze la contul sau deja existent.
+    </p>
+    <p>Dupa conectare, utilizatorul este redirectionat in pagina principală, de aici avand posibilitatea de a alege unde dorește să navigheze, folosindu-se
+      de bara de activități.</p>
+    <p>Bara de activități a paginii principale conține: </p>
         <ul>
-          <li> ......</li>
-          <li> .......</li>
-          <li> ....... </li>
-          <li> .......</li>
+          <li> logo-ul aplicatiei</li>
+          <li> o bara de cautare pentru a usura gasirea produselor</li>
+          <li> un buton de log-out care intoarce utilizatorul spre pagina de landing </li>
+          <li> un buton de redirctionare spre descarcarea de statistici</li>
+          <li>un alt buton care redirectioneaza spre pagina produselor</li>
+          <li>un alt buton spre pagina in care se pot gasi grupurile site-ului</li>
+          <li>"shopping cart" care prezinta articolele user ului din cosul de cumparaturi</li>
+          <li>"favorites" care afiseaza articolele favorite ale utilizatorului logat</li>
+          <li>"Add a new product" care rredirectioneaza utilizatorul pe pagina care ii permite acestuia sa adauge propriile alimente</li>
         </ul>
-        <p>....</p>
-        <ul>
-           <li>.......</li>
-           <li>.....</li>
-           
-        </ul>
-          <p>....
-          </p>
-          <p>........
-          </p>
   </section>
   <section id="interfata-hardwere3"> 
     <h3 >3.2 Interfete hardware</h3>
