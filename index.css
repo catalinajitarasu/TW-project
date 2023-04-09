@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Merienda);
 
 body{
-    background-image: linear-gradient(to right, rgba(149, 139, 223, 1), rgba(186, 183, 208,1));
+    background-image: linear-gradient(to right, rgb(216, 192, 141), rgba(186, 183, 208,1));
     font-family: "Merienda", "sans";
    
 }
@@ -85,12 +85,12 @@ nav ul li:hover::after{
 .main-content h1{
     text-align: center;
     color: rgb(0, 0, 0);
-    font-size: 5.8vw;
+    font-size: 3.0vw;
 }
 
 .main-content p{
     text-align: center;
-    font-size:1.7vw;
+    font-size:1.0vw;
 }
 
 .main-content img{
