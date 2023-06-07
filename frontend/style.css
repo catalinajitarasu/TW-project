@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Ms+Madi&family=Square+Peg&display=swap');
+
+* {
+    font-family: 'Ms Madi', cursive;
+    font-family: 'Square Peg', cursive;
+    transition: all 0.3s linear;
+}
+
 body{
 	margin: 0;
 	padding: 0;
@@ -7,19 +15,19 @@ body{
   flex-direction: column;
 }
 
-.CartContainer{
+.cart-container {
   flex-wrap: wrap;
   align-self: center;
   align-items: center;
 	width: 80%;
 	height: 70%;
-	background-color: #ffffff;
-    border-radius: 25px;
-    box-shadow: 0px 10px 20px #1687d933;
+	background-color: #fff;
+  border-radius: 25px;
+  box-shadow: 0 10px 20px #1687d933;
   
 }
 
-.Header{
+.header{
 	margin: auto;
 	width: 90%;
 	height: 15%;
@@ -28,23 +36,21 @@ body{
 	align-items: center;
 }
 
-.Heading{
+.heading{
 	font-size:2.7vw;
-	font-family: 'Open Sans';
 	font-weight: 700;
 	color: #2F3841;
 }
 
-.Action{
+.action{
 	font-size:1vw;
-	font-family: 'Open Sans';
 	font-weight: 600;
 	color: #E44C4C;
 	cursor: pointer;
 	border-bottom: 1px solid #E44C4C;
 }
 
-.Cart-Items{
+.cart-items{
 	margin: auto;
 	width: 90%;
 	height: 30%;
@@ -53,29 +59,31 @@ body{
 	align-items: center;
   background-color: #f9d7dc;
     border-radius: 25px;
-    box-shadow: 0px 10px 20px #bad8ee33;
+    box-shadow: 0 10px 20px #bad8ee33;
 }
+
 .image-box{
 	width: 15%;
 	text-align: center;
   padding-left: 15px;
 }
+
 .about{
 	height: 100%;
 	width: 24%;
 }
+
 .title{
 	padding-top: 10px;
 	line-height: 10px;
 font-size:2vw;
-  font-family: 'Open Sans';
 	font-weight: 800;
 	color: #202020;
 }
+
 .subtitle{
 	line-height: 10px;
 font-size:1vw;
-  font-family: 'Open Sans';
 	font-weight: 600;
 	color: #909090;
 }
@@ -86,6 +94,7 @@ font-size:1vw;
 	justify-content: space-between;
 	align-items: center;
 }
+
 .btn{
 	width: 40px;
 	height: 40px;
@@ -95,14 +104,13 @@ font-size:1vw;
 	justify-content: center;
 	align-items: center;
 font-size:1.3vw;
-  font-family: 'Open Sans';
 	font-weight: 900;
 	color: #202020;
 	cursor: pointer;
 }
+
 .count{
 font-size:2vw;
-  font-family: 'Open Sans';
 	font-weight: 600;
 	color: #202020;
 }
@@ -112,25 +120,25 @@ font-size:2vw;
 	text-align: right;
   padding-right: 10px;
 }
+
 .amount{
 	padding-top: 20px;
 font-size:2vw;
-  font-family: 'Open Sans';
 	font-weight: 800;
 	color: #202020;
 }
+
 .save{
 	padding-top: 5px;
 font-size:1vw;
-  font-family: 'Open Sans';
 	font-weight: 600;
 	color: #1687d9;
 	cursor: pointer;
 }
+
 .remove{
 	padding-top: 5px;
-font-size:1vw;
-  font-family: 'Open Sans';
+	font-size:1vw;
 	font-weight: 600;
 	color: #E44C4C;
 	cursor: pointer;
@@ -145,25 +153,27 @@ hr{
 	float: right;
 	margin-right: 5%;
 }
+
 .checkout{
 	float: right;
 	margin-right: 5%;
 	width: 28%;
 }
+
 .total{
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
 }
-.Subtotal{
+
+.subtotal{
 font-size:2.5vw;
-  font-family: 'Open Sans';
 	font-weight: 700;
 	color: #202020;
 }
+
 .total-amount{
 font-size:2.5vw;
-  font-family: 'Open Sans';
 	font-weight: 900;
 	color: #202020;
 }
@@ -182,7 +192,7 @@ ul li{
 ul li a{
     text-decoration: none;
     size: 3vw;
-    color: rgb(172, 57, 119);
+    color: rgb(172 57 119);
     padding: 5px 20px;
     border-radius: 40px;
     border: 2px solid transparent;
