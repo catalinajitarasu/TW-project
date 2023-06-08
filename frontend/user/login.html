@@ -6,7 +6,24 @@
     <title>Login Page</title>
     <link rel="stylesheet" href="user.css">
     <script>
+        console.log("Page loaded");
         document.addEventListener("DOMContentLoaded", function() {
+            // redirect if already logged in
+            var userData = JSON.parse(localStorage.getItem("userData"))
+            if(userData && userData.token){
+                alert("Alreadey logged in!")
+                var currentPath = window.location.pathname;
+                var newPath = currentPath.substring(0, currentPath.lastIndexOf("/", currentPath.lastIndexOf("/") - 1));
+                newPath += "/home-page.html";
+                window.location.href = newPath;
+            }
+            else{
+                console.log(userData)
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {         
+            // log in request
             document.getElementById("loginForm").addEventListener("submit", function(event) {
                 event.preventDefault(); // prevent the form from submitting the default way
                 var email = document.getElementById("email").value;
@@ -27,6 +44,12 @@
                     }
                 }).then(data => {
                     console.log(data);
+                    localStorage.setItem("userData", JSON.stringify(data));
+                    var currentPath = window.location.pathname;
+                    var newPath = currentPath.substring(0, currentPath.lastIndexOf("/", currentPath.lastIndexOf("/") - 1));
+                    newPath += "/home-page.html";
+                    window.location.href = newPath;
+                    // window.location.href ='../home-page.html'
                 }).catch(error => {
                     console.error("Error:", error);
                     // alert('failed')

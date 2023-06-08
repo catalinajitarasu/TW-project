@@ -33,16 +33,23 @@ exports.logIn = async(req, res)=>{
     const data = JSON.parse(body)
       try{
         // const name = req.query.name
-        const user = await User.find({email: data.email});
+        let user = await User.find({email: data.email})
         if(user === undefined || user === null){
             res.statusCode=404
             res.statusMessage="User not found!"
             res.end()
             return
         }
-        console.log(`user ${user}`)
+        user = user[0]
         res.statusCode=200
-        res.end(JSON.stringify(user));
+        const dataReturned = {
+          email: user.email, 
+          name: user.name, 
+          registerDate: user.registerDate, 
+          token: 'erdtfyguhijofdxgchvjb' //TODO: replace hardcoded token
+        }
+        console.log(`user ${dataReturned}`)
+        res.end(JSON.stringify(dataReturned));
       }
       catch(error){
         console.log(error)
