@@ -18,7 +18,7 @@ exports.signUp = async(req, res)=>{
       catch(error){
         console.log(error)
         res.statusCode = 500;
-        res.end();
+        res.end(JSON.stringify(error));
       }
     });
 }

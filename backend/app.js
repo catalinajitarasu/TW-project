@@ -15,8 +15,8 @@ const server = http.createServer( async(req, res) => {
   if (handler) {
     try {
       await handler.controller(req, res);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
       res.statusCode = 500;
       res.end('Internal server error');
     }
