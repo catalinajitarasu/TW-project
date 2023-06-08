@@ -1,21 +1,24 @@
 const Product = require('../models/productModel');
 
 exports.addProduct = async (req, res) => {
-  try {
-    const { photo, name, description, price, mentions } = req.body;
-
-    const newProduct = new Product({
-      photo,
-      name,
-      description,
-      price,
-      mentions
+    let body = '';
+    req.on('data', (chunk) => {
+      body +=chunk.toString();
     });
-    const savedProduct = await newProduct.save();
+    req.on('end', async () => {
+    const data = JSON.parse(body);
+  try {
 
-    res.status(201).json(savedProduct);
+    const newProduct = new Product(data);
+    console.log(newProduct);
+    const response = newProduct.save();
+    console.log(`response ${response}`)
+    res.status=201;
+    res.end(JSON.stringify(savedProduct));
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.log(error)
+        res.statusCode = 500;
+        res.end();
   }
-};
+});
+}
