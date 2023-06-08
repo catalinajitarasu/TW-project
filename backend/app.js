@@ -9,11 +9,26 @@ const routes = require('./routes');
 
 
 const server = http.createServer( async(req, res) => {
+  if (req.method === 'OPTIONS') {
+    // Add CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.writeHead(204);
+    res.end();
+    return;
+}
   const parsedUrl = url.parse(req.url, true);
-  const handler = routes.find(route => route.path === parsedUrl.pathname && route.method === req.method);
-  console.log(handler)
-  if (handler) {
+  console.log(parsedUrl.pathname)
+  console.log(`routes ${routes}`)
+  console.log(`req.method ${req.method}`)
+  const handler = routes.find(route => route.path === parsedUrl.pathname &&
+                                       route.method === req.method);
+  console.log(`handler ${handler}`)
+  if (handler || handler !==undefined) {
     try {
+      res.setHeader('Access-Control-Allow-Origin', '*');
       await handler.controller(req, res);
     } catch (error) {
       console.error(error);
