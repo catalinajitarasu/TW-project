@@ -42,10 +42,10 @@
                     }
                 }).then(data => {
                     console.log("Response:", data);
-                    var currentPath = window.location.pathname;
-                    var newPath = currentPath.substring(0, currentPath.lastIndexOf("/", currentPath.lastIndexOf("/") - 1));
-                    newPath += "/add-prod.html";
-                    window.location.href = newPath;
+                    // var currentPath = window.location.pathname;
+                    // var newPath = currentPath.substring(0, currentPath.lastIndexOf("/", currentPath.lastIndexOf("/") - 1));
+                    // newPath += "/add-prod.html";
+                    // window.location.href = newPath;
                     // Handle response
                 }).catch(error => {
                     console.error("Error:", error);
@@ -74,25 +74,25 @@
             <form  action="http://localhost:8000/add-product" method="POST" id="add-product">
                 <h1>Complete the form to add a new product</h1>
                 <div class="input-control">
-                    <label id="photo">Picture</label>
-                    <input type="file" name="photo" required>
+                    <label for="photo">Picture</label>
+                    <input type="file" id="photo" required>
                 </div>
                 
                 <div class="input-control">
-                    <label id="name">Name</label>
-                    <input type="text" name="mentions" placeholder="Add the name of product">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Add the name of product">
                 </div>
                 <div class="input-control">
-                    <label id="description">Description</label>
-                    <input type="text" name="mentions" placeholder="Add a description">
+                    <label for="description">Description</label>
+                    <input type="text" id="description" placeholder="Add a description">
                 </div>
                 <div class="input-control">
-                    <label id="price">Price</label>
-                    <input type="text" name="mentions" placeholder="Add price in LEI">
+                    <label for="price">Price</label>
+                    <input type="text" id="price" placeholder="Add price in LEI">
                 </div>
                 <div class="input-control">
-                    <label id="mentions">Special mentions</label>
-                    <input type="text" name="mentions" placeholder="Add special mentions">
+                    <label for="mentions">Special mentions</label>
+                    <input type="text" id="mentions" placeholder="Add special mentions">
                 </div>
                 
                 <button type = "submit" >Submit product</button>
