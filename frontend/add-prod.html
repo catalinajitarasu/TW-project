@@ -5,8 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style-home-page.css">
     <link rel="stylesheet" type="text/css" href="prod.css">
-
     <title>Document</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("add-product").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                var photo = document.getElementById("photo").value;
+                var name = document.getElementById("name").value;
+                var description = document.getElementById("description").value;
+                var price = document.getElementById("price").value;
+                var mentions = document.getElementById("mentions").value;
+
+                var data = {
+                    photo: photo,
+                    name: name,
+                    description: description,
+                    price: price,
+                    mentions: mentions
+                };
+
+                console.log("Data to be sent:", data);
+
+                fetch("http://localhost:8000/add-product", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (response.ok) {
+                        console.log("Data submitted successfully");
+                        return response.json();
+                    } else {
+                        throw new Error("Failed to submit data");
+                    }
+                }).then(data => {
+                    console.log("Response:", data);
+                    var currentPath = window.location.pathname;
+                    var newPath = currentPath.substring(0, currentPath.lastIndexOf("/", currentPath.lastIndexOf("/") - 1));
+                    newPath += "/add-prod.html";
+                    window.location.href = newPath;
+                    // Handle response
+                }).catch(error => {
+                    console.error("Error:", error);
+                    // Handle error
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="main">
@@ -24,8 +71,8 @@
 
     <div class="popup">
         <div class="form">
-            <form id="add-product" action="/" >
-                <h1>Complite the formular for adding a new product</h1>
+            <form  action="http://localhost:8000/add-product" method="POST" id="add-product">
+                <h1>Complete the form to add a new product</h1>
                 <div class="input-control">
                     <label id="photo">Picture</label>
                     <input type="file" name="photo" required>
@@ -48,7 +95,7 @@
                     <input type="text" name="mentions" placeholder="Add special mentions">
                 </div>
                 
-                <button name="submit-product">Submit product</button>
+                <button type = "submit" >Submit product</button>
                 
             </form>
         </div>
