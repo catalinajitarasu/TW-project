@@ -21,4 +21,18 @@ exports.addProduct = async (req, res) => {
     res.end(JSON.stringify(error));
   }
 });
-}
+};
+
+exports.getProducts = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 200;
+    res.end(JSON.stringify(products));
+  } catch (error) {
+    console.log(error);
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+  }
+};

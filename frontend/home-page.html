@@ -5,6 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style-home-page.css">
     <title>Document</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("http://localhost:8000/products")
+                .then(response => response.json())
+                .then(data => {
+                    // Parcurgem fiecare produs din răspunsul primit
+                    data.forEach(product => {
+                        // Crearea div-ului pentru produsul din menu-container
+                        var menuDiv = document.createElement("div");
+                        menuDiv.className = "menu";
+                        menuDiv.setAttribute("data-name", product.id);
+
+                        // Adăugarea imaginii
+                        var img = document.createElement("img");
+                        img.src = product.photo;
+                        img.alt = product.name;
+                        menuDiv.appendChild(img);
+
+                        // Adăugarea numelui
+                        var name = document.createElement("h3");
+                        name.textContent = product.name;
+                        menuDiv.appendChild(name);
+
+                        // Adăugarea prețului
+                        var price = document.createElement("div");
+                        price.className = "price";
+                        price.textContent = product.price + " lei";
+                        menuDiv.appendChild(price);
+
+                        // Adăugarea produsului în containerul menu-container
+                        document.querySelector(".menu-container").appendChild(menuDiv);
+
+                        // Cream elementele HTML corespunzătoare pentru fiecare produs și adăugam în containerul menu-preview
+
+                        // Crearea div-ului pentru produsul din menu-preview
+                        var previewDiv = document.createElement("div");
+                        previewDiv.className = "preview";
+                        previewDiv.setAttribute("data-target", product.id);
+
+                        // Adăugarea butonului de închidere
+                        var closeButton = document.createElement("button");
+                        closeButton.className = "close-button";
+                        closeButton.innerHTML = "&times;";
+                        previewDiv.appendChild(closeButton);
+
+                        // Adăugarea imaginii
+                        var imgPreview = document.createElement("img");
+                        imgPreview.src = product.photo;
+                        imgPreview.alt = product.name;
+                        previewDiv.appendChild(imgPreview);
+
+                        // Adăugarea numelui
+                        var namePreview = document.createElement("h3");
+                        namePreview.textContent = product.name;
+                        previewDiv.appendChild(namePreview);
+
+                        // Adăugarea descrierii
+                        var description = document.createElement("p");
+                        description.textContent = product.description;
+                        previewDiv.appendChild(description);
+
+                        // Adăugarea prețului
+                        var pricePreview = document.createElement("div");
+                        pricePreview.className = "price";
+                        pricePreview.textContent = product.price + " lei";
+                        previewDiv.appendChild(pricePreview);
+
+                        // Adăugarea link-ului de adăugare în coș
+                        var buyLink = document.createElement("a");
+                        buyLink.href = "#";
+                        buyLink.className = "buy";
+                        buyLink.textContent = "Add to cart";
+                        previewDiv.appendChild(buyLink);
+
+                        // Adăugarea produsului în containerul menu-preview
+                        document.querySelector(".menu-preview").appendChild(previewDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+    </script>
 </head>
 <body>
     <div class="main">
@@ -30,113 +113,15 @@
     <div class="container">
         <h3 class="headeing">Hello, @username!</h3> 
         <div class="menu-container">      <!--products-container--> 
-
-            <div class="menu" data-name="p-1">  <!--product--> 
-                <img src="capsuni.jpg" alt="imag">
-                <h3>Capsuni</h3>
-                <div class="price">12.00 lei/kg</div>
-            </div>
-
-            <div class="menu" data-name="p-2">
-                <img src="nutella.jpg" alt="imag">
-                <h3>Nutella</h3>
-                <div class="price">10.00 lei/buc</div>
-            </div>
-
-            <div class="menu" data-name="p-3">
-                <img src="oreo.jpg" alt="imag">
-                <h3>Biscuiti oreo</h3>
-                <div class="price">4.00 lei/buc</div>
-            </div>
-
-            <div class="menu" data-name="p-4">
-                <img src="lapte.jpg" alt="imag">
-                <h3>LApte Zuzu</h3>
-                <div class="price">7.00 lei/buc</div>
-            </div>
-
-            <div class="menu" data-name="p-5">
-                <img src="avocado.jpg" alt="imag">
-                <h3>Avocado</h3>
-                <div class="price">5.00 lei/buc</div>
-            </div>
-
-            <div class="menu" data-name="p-6">
-                <img src="orez.jpg" alt="imag">
-                <h3>Orez</h3>
-                <div class="price">5.00 lei/buc</div>
-            </div>
         </div>
     </div>
 
     
 <div class="menu-preview">   <!--products-preview-->
-
-    <div class="preview" data-target="p-1">
-        <button class="close-button">&times;</button>
-       <img src="capsuni.jpg" alt="">
-       <h3>Capsuni</h3>
-       
-       <p>Capsunele contin putine calorii si carbohidrati, intr-o portie mare. O cana de capsune contine 49 de calorii, oferind 3 grame de fibre, si doar 12 grame de carbohidrati, rezultand 9 grame de carbohidrati net. Capsunele au mai multe fibre insolubile decat fibre solubile. De asemenea, au un indice glicemic scazut, de 40</p>
-       <div class="price">12.00 lei/kg</div>
-       <a href="#" class="buy">Add to cart</a>
-    </div>
  
-    <div class="preview" data-target="p-2">
-        <button class="close-button">&times;</button>
-       <img src="nutella.jpg" alt="">
-       <h3>Nutella</h3>
-       
-       <p>Fiecare borcan de Nutella® conține 7 ingrediente de calitate alese cu grijă și cam asta este tot. Este timpul pentru un mic dejun delicios.</p>
-       <div class="price">10.00 lei/buc</div>
-       <a href="#" class="buy">Add to cart</a>
-    </div>
- 
-    <div class="preview" data-target="p-3">
-        <button class="close-button">&times;</button>
-        <img src="oreo.jpg" alt="">
-        <h3>Biscuiti oreo</h3>
-        
-        <p>Produsul Biscuiti Oreo cu vanilie conține 20 grame de grăsimi, din care saturate 5 grame, 69 grame de carbohidrați.</p>
-        <div class="price">4.00 lei/buc</div>
-        <a href="#" class="buy">Add to cart</a>
-    </div>  
- 
-    <div class="preview" data-target="p-4">
-        <button class="close-button">&times;</button>
-        <img src="lapte.jpg" alt="">
-        <h3>Lapte Zuzu</h3>
-        
-        <p>Acest produs contine lapte de vaca integral standardizat 3.5% grasime, omogenizat si pasteurizat la temperatura inalta.</p>
-        <div class="price">7.00lei/buc</div>
-        <a href="#" class="buy">Add to cart</a>
-    </div> 
- 
-    <div class="preview" data-target="p-5">
-        <button class="close-button">&times;</button>
-        <img src="avocado.jpg" alt="">
-        <h3>Avocado</h3>
-        
-        <p>Este bogat in proteine, grasimi sanatoase (mononesaturate), potasiu, calciu, magneziu, fosfor, fier.</p>
-        <div class="price">5.00 lei/buc</div>
-        <a href="#" class="buy">Add to cart</a>
-    </div> 
- 
-    <div class="preview" data-target="p-6">
-        <button class="close-button">&times;</button>
-        <img src="orez.jpg" alt="">
-        <h3>Orez</h3>
-        
-        <p>Pentru cele mai bune sarmalute, ai nevoie de un orez pe masura. Alege un orez special!</p>
-        <div class="price">5.00lei/buc</div>
-        
-        <a href="#" class="buy">Add to cart</a>
-        
-    </div> 
- 
- </div>
+</div>
  
 
-    <script src="js-home-page.js"></script>
+<script src="js-home-page.js"></script>
 </body>
 </html>
