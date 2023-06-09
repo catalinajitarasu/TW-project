@@ -79,6 +79,12 @@
                         buyLink.textContent = "Add to cart";
                         previewDiv.appendChild(buyLink);
 
+                        //Adaugarea butonului pentru adaugare la favorite
+                        var favButton = document.createElement("button");
+                        favButton.className = "favorite-button";
+                        favButton.textContent = "Add to favorites";
+                        previewDiv.appendChild(favButton);
+
                         // Adăugarea produsului în containerul menu-preview
                         document.querySelector(".menu-preview").appendChild(previewDiv);
                     });

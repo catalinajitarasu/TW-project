@@ -280,6 +280,22 @@ ul li a:hover{
     background: none;
     color: #333;
 }
+
+.menu-preview .preview .favorite-button{
+    display: inline-block;
+    width: 10rem; height: 2.6rem;
+    background: gold;
+    color: honeydew;
+    font-size: 1.5rem;
+    border: 0.1rem solid gold;
+    border-radius: 0.5rem;
+}
+
+.menu-preview .preview .favorite-button:hover{
+    background: none;
+    color: #333;
+}
+
 .menu-preview .preview .close-button{
     position: absolute;
     top: 1.5rem;
