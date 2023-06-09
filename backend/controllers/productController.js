@@ -11,8 +11,8 @@ exports.addProduct = async (req, res) => {
 
     const newProduct = new Product(data);
     console.log(newProduct);
-    const response = newProduct.save();
-    console.log(`response ${response}`)
+    const savedProduct = await newProduct.save();
+    console.log(`response ${savedProduct}`)
     res.status=201;
     res.end(JSON.stringify(savedProduct));
   } catch (error) {
