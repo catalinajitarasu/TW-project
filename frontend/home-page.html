@@ -88,10 +88,77 @@
                         // Adăugarea produsului în containerul menu-preview
                         document.querySelector(".menu-preview").appendChild(previewDiv);
                     });
+                     // Adăugarea evenimentului de clic pentru elementele de previzualizare
+                     document.querySelectorAll('.menu-preview .preview').forEach(preview => {
+                      preview.onclick = () => {
+                        var target = preview.getAttribute('data-target');
+                        var menuItems = document.querySelectorAll('.menu-container .menu');
+                        menuItems.forEach(item => {
+                          var name = item.getAttribute('data-name');
+                          if (name === target) {
+                            item.click();
+                          }
+                        });
+                      };
+                    });
                 })
                 .catch(error => {
                     console.error("Error:", error);
                 });
+                var searchForm = document.querySelector(".search-box");
+            searchForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+                var searchInput = document.querySelector(".search-txt").value;
+
+                fetch("http://localhost:8000/products?name=" + encodeURIComponent(searchInput))
+                    .then(response => response.json())
+                    .then(data => {
+                        // Ștergem produsele existente din container
+                        document.querySelector(".menu-container").innerHTML = "";
+
+                        // Verificăm dacă s-au găsit produse
+                        if (data.length === 0) {
+                            // Produsul nu a fost găsit, afișăm mesajul corespunzător
+                            var messageDiv = document.createElement("div");
+                            messageDiv.className = "search-message";
+                            messageDiv.textContent = "Produsul cautat nu a fost gasit";
+                            document.querySelector(".menu-container").appendChild(messageDiv);
+                        } else {
+                            // Parcurgem fiecare produs găsit și le adăugăm în containerul menu-container
+                            data.forEach(product => {
+                                var menuDiv = document.createElement("div");
+                                menuDiv.className = "menu";
+                                menuDiv.setAttribute("data-name", product.id);
+
+                                var img = document.createElement("img");
+                                img.src = product.photo;
+                                img.alt = product.name;
+                                menuDiv.appendChild(img);
+
+                                var name = document.createElement("h3");
+                                name.textContent = product.name;
+                                menuDiv.appendChild(name);
+
+                                var price = document.createElement("div");
+                                price.className = "price";
+                                price.textContent = product.price + " lei";
+                                menuDiv.appendChild(price);
+
+                                document.querySelector(".menu-container").appendChild(menuDiv);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            });
+
+            // Adăugarea evenimentului de clic pentru butonul de închidere
+            document.querySelectorAll('.menu-preview .preview .close-button').forEach(button => {
+              button.onclick = () => {
+                button.parentNode.style.display = 'none';
+              };
+            });
         });
     </script>
 </head>
@@ -109,9 +176,11 @@
             <li> <a href="download.html">Statistics</a></li>
             <li> <a href="user/settings.html">Settings</a></li>
             <li> <a href="landing.html">Login-out</a></li>
-            <li class="search-box" >
-                <input class="search-txt" type="text" name="name" placeholder="Type a product">
-                <a class="search-btn" href="products.html"><img src="search-btn.png" alt="btn"></a>
+            <li>
+                <form class="search-box">
+                    <input class="search-txt" type="text" name="name" placeholder="Type a product">
+                    <button class="search-btn" type="submit"><img src="search-btn.png" alt="btn"></button>
+                </form>
             </li>
         </ul>
     </div>
@@ -124,10 +193,8 @@
 
     
 <div class="menu-preview">   <!--products-preview-->
- 
 </div>
  
-
 <script src="js-home-page.js"></script>
 </body>
 </html>

@@ -23,9 +23,37 @@ exports.addProduct = async (req, res) => {
 });
 };
 
+// exports.getProducts = async (req, res) => {
+//   try {
+//     const products = await Product.find();
+//     res.setHeader('Content-Type', 'application/json');
+//     res.statusCode = 200;
+//     res.end(JSON.stringify(products));
+//   } catch (error) {
+//     console.log(error);
+//     res.setHeader('Content-Type', 'application/json');
+//     res.statusCode = 500;
+//     res.end(JSON.stringify({ error: 'Internal Server Error' }));
+//   }
+// };
+
 exports.getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const name = req.query?.name; 
+    console.log('Query param - name:', name); 
+
+    let products;
+
+    if (typeof name !== 'undefined') {
+      console.log('Performing search by name...');
+      products = await Product.find({ name: name });
+    } else {
+      console.log('Getting all products...');
+      products = await Product.find();
+    }
+
+    console.log('Products:', products); 
+
     res.setHeader('Content-Type', 'application/json');
     res.statusCode = 200;
     res.end(JSON.stringify(products));
