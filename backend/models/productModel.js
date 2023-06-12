@@ -20,6 +20,10 @@ const productSchema = new Schema({
     },
     mentions: {
         type: String
+    },
+    type: {
+        type: String,
+        required: true
     }
 });
 

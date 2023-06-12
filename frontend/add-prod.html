@@ -16,13 +16,15 @@
                 var description = document.getElementById("description").value;
                 var price = document.getElementById("price").value;
                 var mentions = document.getElementById("mentions").value;
+                var type = document.getElementById("type").value;
 
                 var data = {
                     photo: photo,
                     name: name,
                     description: description,
                     price: price,
-                    mentions: mentions
+                    mentions: mentions,
+                    type: type
                 };
 
                 console.log("Data to be sent:", data);
@@ -94,6 +96,15 @@
                 <div class="input-control">
                     <label for="mentions">Special mentions</label>
                     <input type="text" id="mentions" placeholder="Add special mentions">
+                </div>
+                <div class="input-control">
+                    <label for="type">Type</label>
+                    <select id="type">
+                        <option value="Cereale">Cereale</option>
+                        <option value="Dulciuri">Dulciuri</option>
+                        <option value="Fructe">Fructe</option>
+                        <option value="Legume">Legume</option>
+                    </select>
                 </div>
                 
                 <button type = "submit" >Submit product</button>
