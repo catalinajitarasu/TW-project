@@ -10,6 +10,8 @@
             fetch("http://localhost:8000/products")
                 .then(response => response.json())
                 .then(data => {
+                    console.log("Data received:", data);
+                    
                     // Parcurgem fiecare produs din răspunsul primit
                     data.forEach(product => {
                         // Crearea div-ului pentru produsul din menu-container
@@ -93,24 +95,36 @@
                         // Adăugarea produsului în containerul menu-preview
                         document.querySelector(".menu-preview").appendChild(previewDiv);
                     });
-                     // Adăugarea evenimentului de clic pentru elementele de previzualizare
-                     document.querySelectorAll('.menu-preview .preview').forEach(preview => {
-                      preview.onclick = () => {
-                        var target = preview.getAttribute('data-target');
-                        var menuItems = document.querySelectorAll('.menu-container .menu');
-                        menuItems.forEach(item => {
-                          var name = item.getAttribute('data-name');
-                          if (name === target) {
-                            item.click();
-                          }
-                        });
-                      };
+
+                    // Adăugarea evenimentului de clic pentru elementele de previzualizare
+                    let previewMenu = document.querySelector('.menu-preview');
+                    let previewBox = previewMenu.querySelectorAll('.preview');
+
+                    document.querySelectorAll('.menu-container .menu').forEach(product => {
+                     product.onclick = () => {
+                            previewMenu.style.display = 'flex';
+                            let name = product.getAttribute('data-name');
+                            previewBox.forEach(preview => {
+                             let target = preview.getAttribute('data-target');
+                              if (name === target) {
+                               preview.classList.add('active');
+                           }
+                      });
+                    };
+                   });
+                   previewBox.forEach(close => {
+                        close.querySelector('.close-button').onclick = () => {
+                        close.classList.remove('active');
+                        previewMenu.style.display = 'none';
+                       };
                     });
                 })
                 .catch(error => {
                     console.error("Error:", error);
                 });
-                var searchForm = document.querySelector(".search-box");
+
+            //pentru butonul de cautare dupa nume..... nu prea merge
+            var searchForm = document.querySelector(".search-box");
             searchForm.addEventListener("submit", function(event) {
                 event.preventDefault();
                 var searchInput = document.querySelector(".search-txt").value;
@@ -118,6 +132,8 @@
                 fetch("http://localhost:8000/products?name=" + encodeURIComponent(searchInput))
                     .then(response => response.json())
                     .then(data => {
+                        console.log("Search results:", data);
+
                         // Ștergem produsele existente din container
                         document.querySelector(".menu-container").innerHTML = "";
 
@@ -161,6 +177,7 @@
             // Adăugarea evenimentului de clic pentru butonul de închidere
             document.querySelectorAll('.menu-preview .preview .close-button').forEach(button => {
               button.onclick = () => {
+                console.log("Clicked on close button:", button);
                 button.parentNode.style.display = 'none';
               };
             });
@@ -192,14 +209,13 @@
     
     <div class="container">
         <h3 class="headeing">Hello, @username!</h3> 
-        <div class="menu-container">      <!--products-container--> 
+        <div class="menu-container">   
         </div>
     </div>
 
     
-<div class="menu-preview">   <!--products-preview-->
+<div class="menu-preview">
 </div>
- 
-<script src="js-home-page.js"></script>
+
 </body>
 </html>
