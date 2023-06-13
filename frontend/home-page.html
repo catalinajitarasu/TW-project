@@ -72,6 +72,11 @@
                         pricePreview.textContent = product.price + " lei";
                         previewDiv.appendChild(pricePreview);
 
+                        // Adăugarea tipului
+                        var typePreview = document.createElement("p");
+                        typePreview.textContent = product.type;
+                        previewDiv.appendChild(typePreview);
+
                         // Adăugarea link-ului de adăugare în coș
                         var buyLink = document.createElement("a");
                         buyLink.href = "#";

@@ -30,11 +30,13 @@
                     <div class="caret"></div>
                 </div>
                 <ul class="menuu">
+                    <li>All products</li>
                     <li>Favorites products</li>
                     <li>The most bought products</li>
                 </ul>
             </div>
         </ul>
+        <button id="downloadBtn">Download CSV</button> <!-- Butonul de descărcare -->
     </div>
     <div class="container">
         <h3 class="headeing">Statistics</h3> 
@@ -43,32 +45,59 @@
     <script>
 		const dropdowns = document.querySelectorAll('.dropdown');
 
-        dropdowns.forEach(dropdown =>{
-            const select = dropdown.querySelector('.select');
-            const caret = dropdown.querySelector('.caret');
-            const menuu = dropdown.querySelector('.menuu');
-            const options = dropdown.querySelector('.menu li');
-            const selected = dropdown.querySelector('.selected');
+dropdowns.forEach(dropdown => {
+    const select = dropdown.querySelector('.select');
+    const caret = dropdown.querySelector('.caret');
+    const menuu = dropdown.querySelector('.menuu');
+    const options = dropdown.querySelectorAll('.menuu li');
+    const selected = dropdown.querySelector('.selected');
 
-            select.addEventListener('click', ()=>{
-                select.classList.toggle('select-clicked');
-                caret.classList.toggle('caret-rotate');
-                menuu.classList.toggle('menu-open');
-            });
+    select.addEventListener('click', () => {
+        select.classList.toggle('select-clicked');
+        caret.classList.toggle('caret-rotate');
+        menuu.classList.toggle('menu-open');
+    });
 
-            options.forEach(option =>{
-                option.addEventListener('click', ()=>{
-                    selected.innerText = option.innerText;
-                    select.classList.remove('select-clicked');
-                    caret.classList.remove('caret-rotate');
-                    menuu.classList.remove('menu-open');
-                    options.forEach(option =>{
-                        option.classList.remove('active');
-                    });
-                    option.classList.add('active');
-                });
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            selected.innerText = option.innerText;
+            select.classList.remove('select-clicked');
+            caret.classList.remove('caret-rotate');
+            menuu.classList.remove('menu-open');
+            options.forEach(option => {
+                option.classList.remove('active');
             });
+            option.classList.add('active');
         });
+    });
+});
+       document.addEventListener("DOMContentLoaded", function() {
+    const downloadBtn = document.getElementById('downloadBtn');
+    
+    downloadBtn.addEventListener('click', function() {
+        fetch("http://localhost:8000/download-csv")
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('A apărut o eroare la descărcarea fișierului CSV.');
+                }
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'product_report.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error('Eroare la descărcarea fișierului CSV:', error);
+            });
+    });
+});
 	</script>
 </body>
 </html>

@@ -7,4 +7,6 @@ module.exports = [
     { path: '/sign-up', method: 'POST', controller: userController.signUp },
     { path: '/add-product', method: 'POST' , controller: productController.addProduct},
     { path: '/products', method: 'GET', controller: productController.getProducts },
+    { path: '/products/by-type', method: 'GET', controller: productController.getProductsByType },
+    { path: '/download-csv', method: 'GET', controller: productController.generateProductReport  },
 ];
