@@ -98,7 +98,8 @@ exports.logIn = async(req, res)=>{
         res.statusCode=200
         const dataReturned = {
           email: user.email, 
-          name: user.name, 
+          firstName: user.firstName, 
+          lastName: user.lastName, 
           registerDate: user.registerDate, 
           token: 'erdtfyguhijofdxgchvjb' //TODO: replace hardcoded token
         }

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    registerDate: {
+    registerDate:{
         type: Date,
         default: new Date()
     },
