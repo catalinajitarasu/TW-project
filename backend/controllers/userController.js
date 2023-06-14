@@ -1,4 +1,5 @@
 const User = require("../models/userModel")
+const bcrypt = require('bcryptjs')
 
 exports.signUp = async(req, res)=>{
     let body = '';
@@ -8,6 +9,9 @@ exports.signUp = async(req, res)=>{
     req.on('end', async () => {
     const data = JSON.parse(body)
       try{
+        console.log(data)
+        // hash the password
+        data.password = await bcrypt.hash(data.password, 12);
         const newUser = new User(data)
         console.log(newUser)
         const response = await newUser.save()
@@ -33,14 +37,22 @@ exports.logIn = async(req, res)=>{
     const data = JSON.parse(body)
       try{
         // const name = req.query.name
-        let user = await User.find({email: data.email})
+        let user = await User.findOne({email: data.email})
         if(user === undefined || user === null){
             res.statusCode=404
             res.statusMessage="User not found!"
             res.end()
             return
         }
-        user = user[0]
+        console.log(user)
+        console.log(data.password)
+        const isEqual = await bcrypt.compare(data.password, user.password);
+        if(!isEqual){
+          res.statusCode=401
+          res.statusMessage="Wrong password!"
+          res.end()
+          return
+        }
         res.statusCode=200
         const dataReturned = {
           email: user.email, 

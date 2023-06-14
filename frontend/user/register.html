@@ -5,57 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagina de Înregistrare</title>
     <link rel="stylesheet" href="user.css">
+    <script>
+        function checklLoggedIn(){
+            var userData = JSON.parse(localStorage.getItem("userData"))
+            if(userData && userData.token){
+                alert("Alreadey logged in!")
+                var currentPath = window.location.pathname;
+                var newPath = currentPath.substring(0, currentPath.lastIndexOf("/", currentPath.lastIndexOf("/") - 1));
+                newPath += "/home-page.html";
+                window.location.href = newPath;
+            }
+            else{
+                console.log(userData)
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+        // redirect if already logged in
+        checklLoggedIn()
+    });
+
+    // todo:
+    document.addEventListener("DOMContentLoaded", function() {         
+        // register request
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // prevent the form from submitting the default way
+            var email = document.getElementById("email").value;
+            var firstName = document.getElementById("firstName").value;
+            var lastName = document.getElementById("lastName").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var age = document.getElementById("age").value;
+            var gender = document.getElementById("gender").value;
+            var city = document.getElementById("city").value;
+            var country = document.getElementById("country").value;
+            var diet = document.getElementById("diet").value;
+            var allergies = document.getElementById("allergies").value;
+            var preferences = document.getElementById("preferences").value;
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+            
+            fetch("http://localhost:8000/sign-up", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email, firstName, lastName, password, age, gender,
+                    city, country, diet, allergies, preferences
+                })
+            }).then(response => {
+                console.log(response)
+                if (response.ok) {
+                    console.log("Data submitted successfully");
+                    return response.json();
+                } else {
+                    // alert()
+                    throw new Error("Failed to submit data");
+                }
+            }).then(data => {
+                console.log(data);
+                alert("User created. Go to login!")
+                var currentPath = window.location.pathname;
+                var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'login.html';
+                window.location.href = newPath;
+                // window.location.href ='../home-page.html'
+            }).catch(error => {
+                alert(error)
+                console.error("Error:", error);
+            });
+        });
+    });
+    </script>
 </head>
 <body>
     <div class="container">
         <h2>Înregistrare</h2>
-        <form>
+        <form id="registerForm">
             <div class="input-group">
-                <label for="nume">Nume:</label>
-                <input type="text" id="nume" name="nume" required>
+                <label for="firstName">First name:</label>
+                <input type="text" id="firstName" name="firstName" required>
             </div>
             <div class="input-group">
-                <label for="prenume">Prenume:</label>
-                <input type="text" id="prenume" name="prenume" required>
+                <label for="lastName">Last name:</label>
+                <input type="text" id="lastName" name="LastName" required>
             </div>
             <div class="input-group">
-                <label for="email">Adresa de email:</label>
+                <label for="email">Email address:</label>
                 <input type="email" id="email" name="email" required>
             </div>
             <div class="input-group">
-                <label for="parola">Parola:</label>
-                <input type="password" id="parola" name="parola" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
             </div>
             <div class="input-group">
-                <label for="confirmare_parola">Confirmare parola:</label>
-                <input type="password" id="confirmare_parola" name="confirmare_parola" required>
+                <label for="confirmPassword">Confirm password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
             </div>
             <div class="input-group">
-                <label for="varsta">Vârstă:</label>
-                <input type="number" id="varsta" name="varsta" min="1" required>
+                <label for="age">Vârstă:</label>
+                <input type="number" id="age" name="age" min="1" required>
             </div>
             <div class="input-group">
-                <label for="gen">Gen:</label>
-                <select id="gen" name="gen" required>
-                    <option value="">Alegeți genul</option>
-                    <option value="masculin">Masculin</option>
-                    <option value="feminin">Feminin</option>
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="" disabled selected hidden>Select an option</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
                 </select>
             </div>
             <div class="input-group">
-                <label for="oras">Oraș:</label>
-                <input type="text" id="oras" name="oras" required>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
             </div>
             <div class="input-group">
-                <label for="tara">Țară:</label>
-                <input type="text" id="tara" name="tara" required>
+                <label for="country">Țară:</label>
+                <input type="text" id="country" name="country" required>
             </div>
             <div class="input-group">
-                <label for="regim_alimentar">Regim alimentar:</label>
-                <select id="regim_alimentar" name="regim_alimentar" required>
-                    <option value="">Alegeți regimul alimentar</option>
-                    <option value="carnivor">Carnivor</option>
+                <label for="diet">Diet:</label>
+                <select id="diet" name="diet" required>
+                    <option value="" disabled selected hidden>Select an option</option>
                     <option value="omnivor">Omnivor</option>
+                    <option value="carnivor">Carnivor</option>
                     <option value="vegetarian">Vegetarian</option>
                     <option value="vegan">Vegan</option>
                     <option value="raw-vegan">Raw-Vegan</option>
@@ -63,14 +137,14 @@
                 </select>
             </div>
             <div class="input-group">
-                <label for="alergii">Alergii:</label>
-                <input type="text" id="alergii" name="alergii" placeholder="Ex. gluten, lactoză">
+                <label for="allergies">Allergies:</label>
+                <input type="text" id="allergies" name="allergies" placeholder="Ex. gluten, lactose, peanuts">
             </div>
             <div class="input-group">
-                <label for="preferinte">Preferințe culinare:</label>
-                <input type="text" id="preferinte" name="preferinte" placeholder="Ex. italian, asiatic">
+                <label for="preferences">Preferences:</label>
+                <input type="text" id="preferences" name="preferences" placeholder="Ex. italian, asiatic">
             </div>
-            <button type="button"  onclick="location.href='./login.html'">Înregistrează-te</button>
+            <button type="submit">Înregistrează-te</button>
         </form>
         <br/>
         <p>Already have an account? <a href="./login.html">Login</a></p>

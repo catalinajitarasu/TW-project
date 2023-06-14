@@ -6,7 +6,11 @@ const userSchema = new Schema({
         type: Date,
         default: new Date()
     },
-    name:{
+    firstName:{
+        type: String,
+        required: true
+    },
+    lastName:{
         type: String,
         required: true
     },
@@ -18,7 +22,32 @@ const userSchema = new Schema({
     password:{
         type: String,
         required: true
-    }
+    },
+    age:{
+        type: Number,
+        required: true
+    },
+    gender:{
+        type: String,
+        required: true
+    },
+    city:{
+        type: String,
+        required: true
+    },
+    country:{
+        type: String,
+        required: true
+    },
+    diet:{
+        type: String,
+    },
+    allergies:{
+        type: String,
+    },
+    preferences:{
+        type: String,
+    },
 });
 
 module.exports = mongoose.model("User", userSchema);
