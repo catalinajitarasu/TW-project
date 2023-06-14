@@ -27,6 +27,48 @@ exports.signUp = async(req, res)=>{
     });
 }
 
+exports.updateUser = async(req, res)=>{
+    let body = '';
+    req.on('data', (chunk) => {
+      body +=chunk.toString();
+    });
+    req.on('end', async () => {
+    const data = JSON.parse(body)
+      try{
+        console.log(data)
+        let user = await User.findOne({email: data.oldEmail})
+        if(user === undefined || user === null){
+            res.statusCode=404
+            res.statusMessage="User not found!"
+            res.end()
+            return
+        }
+        user.firstName = data.firstName
+        user.lastName = data.lastName
+        user.email = data.newEmail
+        user.password = await bcrypt.hash(data.password, 12);
+        user.age = data.age
+        user.gender = data.gender
+        user.city = data.city
+        user.country = data.country
+        user.diet = data.diet
+        user.allergies = data.allergies
+        user.preferences = data.preferences
+
+        console.log(user)
+        const response = await user.save()
+        console.log(`response ${response}`)
+        res.statusCode=201
+        res.end(JSON.stringify(response));
+      }
+      catch(error){
+        console.log(error)
+        res.statusCode = 500;
+        res.end(JSON.stringify(error));
+      }
+    });
+}
+
 
 exports.logIn = async(req, res)=>{
     let body = '';
