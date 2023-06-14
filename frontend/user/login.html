@@ -36,10 +36,12 @@
                     },
                     body: JSON.stringify({email: email})
                 }).then(response => {
+                    console.log(response)
                     if (response.ok) {
                         console.log("Data submitted successfully");
                         return response.json();
                     } else {
+                        // alert()
                         throw new Error("Failed to submit data");
                     }
                 }).then(data => {
@@ -51,8 +53,8 @@
                     window.location.href = newPath;
                     // window.location.href ='../home-page.html'
                 }).catch(error => {
+                    alert('Failed to contact the server')
                     console.error("Error:", error);
-                    // alert('failed')
                 });
             });
         });
