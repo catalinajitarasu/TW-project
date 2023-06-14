@@ -321,6 +321,7 @@ ul li a:hover{
     font-size: 1.5rem;
     border: 0.1rem solid gold;
     border-radius: 0.5rem;
+    cursor: pointer;
 }
 
 .menu-preview .preview .favorite-button:hover{

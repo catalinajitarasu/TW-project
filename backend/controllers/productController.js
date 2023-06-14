@@ -1,4 +1,5 @@
 const Product = require('../models/productModel');
+const User = require('../models/userModel');
 const fs = require('fs');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const PDFDocument = require('pdfkit');
@@ -72,6 +73,52 @@ exports.addProduct = async (req, res) => {
     res.end(JSON.stringify(error));
   }
 });
+};
+
+exports.addToCart = async (req, res) => {
+    let body = '';
+    req.on('data', (chunk) => {
+      body +=chunk.toString();
+    });
+    req.on('end', async () => {
+      const data = JSON.parse(body);
+      try {
+        console.log("add to cart")
+        const product = await Product.findById(data.productId);
+        if(product === undefined || product === null){
+          res.statusCode=404
+          res.statusMessage="Product not found!"
+          res.end()
+          return
+        }
+        let user = await User.find({email: data.userEmail});
+        if(user === undefined || user === null){
+          res.statusCode=404
+          res.statusMessage="User not found!"
+          res.end()
+          return
+        }
+        console.log(user)
+        user = user[0]
+        let currentCart = [];
+        if(!user.hasOwnProperty('cart'))
+          user.cart = [product._id]
+        else
+          user.cart.push(product._id)
+
+        // user.cart = currentCart;
+        const response = await user.save()
+        // console.log(newProduct);
+        // const savedProduct = await newProduct.save();
+        console.log(`response ${response}`)
+        res.status=201;
+        res.end(JSON.stringify(response));
+      } catch (error) {
+        console.log(error)
+        res.statusCode = 500;
+        res.end(JSON.stringify(error));
+      }
+  });
 };
 
 // exports.getProducts = async (req, res) => {

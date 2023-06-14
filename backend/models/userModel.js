@@ -48,6 +48,9 @@ const userSchema = new Schema({
     preferences:{
         type: String,
     },
+    cart:{
+        type: Array
+    }
 });
 
 module.exports = mongoose.model("User", userSchema);

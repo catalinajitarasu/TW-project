@@ -12,6 +12,42 @@
             var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'landing.html';
             window.location.href = newPath;
         }
+
+        function addToCart( product){
+            // var buyButton = document.getElementById("buyBtn");
+            // event.preventDefault()
+            console.log(product)
+            fetch("http://localhost:8000/products/add-to-cart", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        productId: product._id,
+                        userEmail: JSON.parse(localStorage.getItem('userData')).email})
+                }).then(response => {
+                    console.log(response)
+                    if (response.ok) {
+                        console.log("Data submitted successfully");
+                        return response.json();
+                    } else {
+                        alert(response.statusText)
+                        console.log(response)
+                        throw new Error(response.statusText);
+                    }
+                }).then(data => {
+                    console.log(data);
+                    // window.location.href ='../home-page.html'
+                    var currentPath = window.location.pathname;
+            var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'shopping-list.html';
+            window.location.href = newPath;
+                }).catch(error => {
+                    // alert('Failed to contact the server')
+                    console.error("Error:", error);
+                    return false;
+                });
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             fetch("http://localhost:8000/products")
                 .then(response => response.json())
@@ -86,11 +122,14 @@
                         previewDiv.appendChild(typePreview);
 
                         // Adăugarea link-ului de adăugare în coș
-                        var buyLink = document.createElement("a");
-                        buyLink.href = "#";
-                        buyLink.className = "buy";
-                        buyLink.textContent = "Add to cart";
-                        previewDiv.appendChild(buyLink);
+                        var buyButton = document.createElement("button");
+                        buyButton.onclick = function() {
+                            addToCart(product);
+                            };
+                        // buyButton.id = "buyBtn";
+                        buyButton.className = "favorite-button";
+                        buyButton.textContent = "Add to cart";
+                        previewDiv.appendChild(buyButton);
 
                         //Adaugarea butonului pentru adaugare la favorite
                         var favButton = document.createElement("button");
