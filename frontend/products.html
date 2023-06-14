@@ -36,109 +36,12 @@
     <div class="container">
         <h3 class="headeing">Lets see our products!</h3> 
         <div class="menu-container">      <!--products-container--> 
-
-            <div class="menu" data-name="p-1">  <!--product--> 
-                <img src="capsuni.jpg" alt="imag">
-                <h3>Capsuni</h3>
-                <div class="price">12.00 lei/kg</div>
-            </div>
-
-            <div class="menu" data-name="p-2">
-                <img src="nutella.jpg" alt="imag">
-                <h3>Nutella</h3>
-                <div class="price">10.00 lei/buc</div>
-            </div>
-
-            <div class="menu" data-name="p-3">
-                <img src="oreo.jpg" alt="imag">
-                <h3>Biscuiti oreo</h3>
-                <div class="price">4.00 lei/buc</div>
-            </div>
-
-            <div class="menu" data-name="p-4">
-                <img src="lapte.jpg" alt="imag">
-                <h3>LApte Zuzu</h3>
-                <div class="price">7.00 lei/buc</div>
-            </div>
-
-            <div class="menu" data-name="p-5">
-                <img src="avocado.jpg" alt="imag">
-                <h3>Avocado</h3>
-                <div class="price">5.00 lei/buc</div>
-            </div>
-
-            <div class="menu" data-name="p-6">
-                <img src="orez.jpg" alt="imag">
-                <h3>Orez</h3>
-                <div class="price">5.00 lei/buc</div>
-            </div>
         </div>
     </div>
 
     
 <div class="menu-preview">   <!--products-preview-->
-
-    <div class="preview" data-target="p-1">
-        <button class="close-button">&times;</button>
-       <img src="capsuni.jpg" alt="">
-       <h3>Capsuni</h3>
-       
-       <p>Capsunele contin putine calorii si carbohidrati, intr-o portie mare. O cana de capsune contine 49 de calorii, oferind 3 grame de fibre, si doar 12 grame de carbohidrati, rezultand 9 grame de carbohidrati net. Capsunele au mai multe fibre insolubile decat fibre solubile. De asemenea, au un indice glicemic scazut, de 40</p>
-       <div class="price">12.00 lei/kg</div>
-       <a href="#" class="buy">Add to cart</a>
-    </div>
- 
-    <div class="preview" data-target="p-2">
-        <button class="close-button">&times;</button>
-       <img src="nutella.jpg" alt="">
-       <h3>Nutella</h3>
-       
-       <p>Fiecare borcan de Nutella® conține 7 ingrediente de calitate alese cu grijă și cam asta este tot. Este timpul pentru un mic dejun delicios.</p>
-       <div class="price">10.00 lei/buc</div>
-       <a href="#" class="buy">Add to cart</a>
-    </div>
- 
-    <div class="preview" data-target="p-3">
-        <button class="close-button">&times;</button>
-        <img src="oreo.jpg" alt="">
-        <h3>Biscuiti oreo</h3>
-        
-        <p>Produsul Biscuiti Oreo cu vanilie conține 20 grame de grăsimi, din care saturate 5 grame, 69 grame de carbohidrați.</p>
-        <div class="price">4.00 lei/buc</div>
-        <a href="#" class="buy">Add to cart</a>
-    </div>  
- 
-    <div class="preview" data-target="p-4">
-        <button class="close-button">&times;</button>
-        <img src="lapte.jpg" alt="">
-        <h3>Lapte Zuzu</h3>
-        
-        <p>Acest produs contine lapte de vaca integral standardizat 3.5% grasime, omogenizat si pasteurizat la temperatura inalta.</p>
-        <div class="price">7.00lei/buc</div>
-        <a href="#" class="buy">Add to cart</a>
-    </div> 
- 
-    <div class="preview" data-target="p-5">
-        <button class="close-button">&times;</button>
-        <img src="avocado.jpg" alt="">
-        <h3>Avocado</h3>
-        
-        <p>Este bogat in proteine, grasimi sanatoase (mononesaturate), potasiu, calciu, magneziu, fosfor, fier.</p>
-        <div class="price">5.00 lei/buc</div>
-        <a href="#" class="buy">Add to cart</a>
-    </div> 
- 
-    <div class="preview" data-target="p-6">
-        <button class="close-button">&times;</button>
-        <img src="orez.jpg" alt="">
-        <h3>Orez</h3>
-        
-        <p>Pentru cele mai bune sarmalute, ai nevoie de un orez pe masura. Alege un orez special!</p>
-        <div class="price">5.00lei/buc</div>
-        
-        <a href="#" class="buy">Add to cart</a>
-        
-    </div> 
+ </div> 
  
  </div>
  
@@ -146,34 +49,98 @@
     <script src="js-home-page.js"></script>
 
     <script>
-		const dropdowns = document.querySelectorAll('.dropdown');
+		const searchBtn = document.querySelector('.search-btn');
+    const menuContainer = document.querySelector('.menu-container');
+    const menuPreview = document.querySelector('.menu-preview');
+    const noResultsMsg = document.querySelector('.no-results-msg');
+    const searchInput = document.querySelector('.search-txt');
 
-        dropdowns.forEach(dropdown =>{
-            const select = dropdown.querySelector('.select');
-            const caret = dropdown.querySelector('.caret');
-            const menuu = dropdown.querySelector('.menuu');
-            const options = dropdown.querySelector('.menu li');
-            const selected = dropdown.querySelector('.selected');
+    searchBtn.addEventListener('click', searchProducts);
+    searchInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        searchProducts();
+      }
+    });
 
-            select.addEventListener('click', ()=>{
-                select.classList.toggle('select-clicked');
-                caret.classList.toggle('caret-rotate');
-                menuu.classList.toggle('menu-open');
+    function searchProducts() {
+      const searchTerm = searchInput.value.toLowerCase();
+      menuContainer.innerHTML = '';
+      menuPreview.innerHTML = '';
+      noResultsMsg.style.display = 'none';
+
+      fetch(`/products/by-name?name=${searchTerm}`)
+        .then(response => response.json())
+        .then(matchingProducts => {
+          console.log('Matching Products:', matchingProducts);
+
+          if (matchingProducts.length === 0) {
+            noResultsMsg.style.display = 'block';
+          } else {
+            matchingProducts.forEach(product => {
+              const menuDiv = document.createElement('div');
+              menuDiv.classList.add('menu');
+              menuDiv.dataset.name = product.name;
+
+              const img = document.createElement('img');
+              img.src = product.image;
+              img.alt = '';
+
+              const heading = document.createElement('h3');
+              heading.textContent = product.name;
+
+              const price = document.createElement('div');
+              price.classList.add('price');
+              price.textContent = product.price;
+
+              menuDiv.appendChild(img);
+              menuDiv.appendChild(heading);
+              menuDiv.appendChild(price);
+
+              menuContainer.appendChild(menuDiv);
+
+              const previewDiv = document.createElement('div');
+              previewDiv.classList.add('preview');
+              previewDiv.dataset.target = product.name;
+
+              const closeButton = document.createElement('button');
+              closeButton.classList.add('close-button');
+              closeButton.innerHTML = '&times;';
+
+              const previewImg = document.createElement('img');
+              previewImg.src = product.image;
+              previewImg.alt = '';
+
+              const previewHeading = document.createElement('h3');
+              previewHeading.textContent = product.name;
+
+              const previewDescription = document.createElement('p');
+              previewDescription.textContent = product.description;
+
+              const previewPrice = document.createElement('div');
+              previewPrice.classList.add('price');
+              previewPrice.textContent = product.price;
+
+              const addToCartLink = document.createElement('a');
+              addToCartLink.classList.add('buy');
+              addToCartLink.href = '#';
+              addToCartLink.textContent = 'Add to cart';
+
+              previewDiv.appendChild(closeButton);
+              previewDiv.appendChild(previewImg);
+              previewDiv.appendChild(previewHeading);
+              previewDiv.appendChild(previewDescription);
+              previewDiv.appendChild(previewPrice);
+              previewDiv.appendChild(addToCartLink);
+
+              menuPreview.appendChild(previewDiv);
             });
-
-            options.forEach(option =>{
-                option.addEventListener('click', ()=>{
-                    selected.innerText = option.innerText;
-                    select.classList.remove('select-clicked');
-                    caret.classList.remove('caret-rotate');
-                    menuu.classList.remove('menu-open');
-                    options.forEach(option =>{
-                        option.classList.remove('active');
-                    });
-                    option.classList.add('active');
-                });
-            });
+          }
+        })
+        .catch(error => {
+          console.log('Error:', error);
         });
+    }
 	</script>
 </body>
 </html>

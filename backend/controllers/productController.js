@@ -127,3 +127,35 @@ exports.generateProductReport = async (req, res) => {
   }
 };
 
+exports.getProductByName = async (req, res) => {
+  try {
+    const name = req.query?.name; // Obține parametrul de query string "name"
+    console.log('Query param - name:', name); // Adaugă acest console.log
+
+    if (!name) {
+      res.setHeader('Content-Type', 'application/json');
+      res.statusCode = 400;
+      res.end(JSON.stringify({ error: 'Numele produsului lipsește în cererea de căutare.' }));
+      return;
+    }
+
+    const product = await Product.findOne({ name: name });
+
+    if (product) {
+      console.log('Product found:', product); // Adaugă acest console.log
+      res.setHeader('Content-Type', 'application/json');
+      res.statusCode = 200;
+      res.end(JSON.stringify(product));
+    } else {
+      console.log('Product not found.'); // Adaugă acest console.log
+      res.setHeader('Content-Type', 'application/json');
+      res.statusCode = 404;
+      res.end(JSON.stringify({ error: 'Produsul nu a fost găsit.' }));
+    }
+  } catch (error) {
+    console.log(error);
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+  }
+};
