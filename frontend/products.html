@@ -19,18 +19,15 @@
                 <input class="search-txt" type="text" name="name" placeholder="Type to search">
                 <a class="search-btn" href="#"><img src="search-btn.png" alt="btn"></a>
             </li>
-            <li class="dropdown">
-                <div class="select">
-                    <span class="selected">Select type of sorting</span>
-                    <div class="caret"></div>
-                </div>
-                <ul class="menuu">
-                    <li>Cereale</li>
-                    <li>Dulciuri</li>
-                    <li>Fructe</li>
-                    <li>Legume</li>
-                </ul>
-            </li>
+            <div class="dropdown">
+                <select class="select" id="type">
+                  <option value="">Select type of the products</option>
+                  <option value="Cereale">Cereale</option>
+                  <option value="Dulciuri">Dulciuri</option>
+                  <option value="Fructe">Fructe</option>
+                  <option value="Legume">Legume</option>
+                </select>
+              </div>
         </ul>
     </div>
     <div class="container">
@@ -45,10 +42,8 @@
  
  </div>
  
- 
-    <script src="js-home-page.js"></script>
 
-    <script>
+<script>
 		const searchBtn = document.querySelector('.search-btn');
     const menuContainer = document.querySelector('.menu-container');
     const menuPreview = document.querySelector('.menu-preview');
