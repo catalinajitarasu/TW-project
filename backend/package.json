@@ -12,6 +12,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "csv-writer": "^1.6.0",
+    "fs": "^0.0.1-security",
     "mongoose": "^7.2.2",
     "nodemon": "^2.0.22"
   }
