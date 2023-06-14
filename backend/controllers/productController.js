@@ -1,6 +1,7 @@
 const Product = require('../models/productModel');
 const fs = require('fs');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const PDFDocument = require('pdfkit');
 
 exports.generateProductCSV = async (req, res) => {
   try {
@@ -165,6 +166,55 @@ exports.getProductByName = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+  }
+};
+
+
+exports.generateProductPDF = async (req, res) => {
+  try {
+    const products = await Product.find();
+    console.log('Produse găsite:', products);
+
+    const pdf = new PDFDocument();
+    pdf.pipe(fs.createWriteStream('product_report.pdf'));
+
+    pdf.fontSize(18).text('Raport produse', { align: 'center' });
+    pdf.moveDown();
+
+    products.forEach((product) => {
+      pdf.fontSize(12).text(`Nume: ${product.name}`);
+      pdf.fontSize(10).text(`Descriere: ${product.description}`);
+      pdf.fontSize(10).text(`Preț: ${product.price}`);
+      pdf.fontSize(10).text(`Tip: ${product.type}`);
+      pdf.moveDown();
+    });
+
+    pdf.end();
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="product_report.pdf"');
+
+    const fileStream = fs.createReadStream('product_report.pdf');
+    fileStream.pipe(res);
+
+    fileStream.on('end', () => {
+      fs.unlink('product_report.pdf', (err) => {
+        if (err) {
+          console.error('Eroare la ștergerea fișierului PDF:', err);
+        } else {
+          console.log('Fișierul PDF a fost șters cu succes.');
+        }
+      });
+    });
+
+    fileStream.on('error', (error) => {
+      console.error('Eroare la trimiterea fișierului PDF:', error);
+    });
+  } catch (error) {
+    console.error('Eroare la generarea fișierului PDF:', error);
     res.setHeader('Content-Type', 'application/json');
     res.statusCode = 500;
     res.end(JSON.stringify({ error: 'Internal Server Error' }));

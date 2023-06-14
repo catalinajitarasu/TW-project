@@ -36,7 +36,8 @@
                 </ul>
             </div>
         </ul>
-        <button id="downloadBtn">Download CSV</button> <!-- Butonul de descărcare -->
+        <button id="downloadBtn">Download CSV</button>
+        <button id="downloadBtnPDF">Download PDF</button> 
     </div>
     <div class="container">
         <h3 class="headeing">Statistics</h3> 
@@ -95,6 +96,34 @@ dropdowns.forEach(dropdown => {
             })
             .catch(error => {
                 console.error('Eroare la descărcarea fișierului CSV:', error);
+            });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const downloadBtn = document.getElementById('downloadBtnPDF');
+    
+    downloadBtn.addEventListener('click', function() {
+        fetch("http://localhost:8000/download-pdf")
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('A apărut o eroare la descărcarea fișierului PDF.');
+                }
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'all_products_pdf.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error('Eroare la descărcarea fișierului PDF:', error);
             });
     });
 });
