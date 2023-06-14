@@ -115,6 +115,27 @@ ul li a:hover{
     box-sizing: border-box;
 }
 
+#downloadBtn {
+    min-width: 10em;
+    position: relative;
+    margin: 20%;
+    right: 200%;
+    display: flex;
+    background-color: #cca936;
+    color: aliceblue;
+    padding: 1em;
+    font-size: 25px;
+    border: 2px #cca936 solid;
+    border-radius: 0.5em;
+    cursor: pointer;
+    transition: background 0.3s;
+    align-items: center;
+  }
+  
+  #downloadBtn:hover {
+    background-color: #524312;
+  }
+
 .select{
     background: #cca936;
     color: aliceblue;

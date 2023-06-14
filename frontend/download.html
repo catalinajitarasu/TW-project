@@ -20,8 +20,8 @@
                     <div class="caret"></div>
                 </div>
                 <ul class="menuu">
-                    <li>CSV</li>
-                    <li>PDF</li>
+                    <li data-format="csv">CSV</li>
+                    <li data-format="pdf">PDF</li>
                 </ul>
             </div>
             <div class="dropdown">
@@ -35,9 +35,8 @@
                     <li>The most bought products</li>
                 </ul>
             </div>
+            <button id="downloadBtn">Download</button>
         </ul>
-        <button id="downloadBtn">Download CSV</button>
-        <button id="downloadBtnPDF">Download PDF</button> 
     </div>
     <div class="container">
         <h3 class="headeing">Statistics</h3> 
@@ -72,61 +71,88 @@ dropdowns.forEach(dropdown => {
         });
     });
 });
-       document.addEventListener("DOMContentLoaded", function() {
-    const downloadBtn = document.getElementById('downloadBtn');
-    
-    downloadBtn.addEventListener('click', function() {
-        fetch("http://localhost:8000/download-csv")
-            .then(response => {
-                if (response.ok) {
-                    return response.blob();
-                } else {
-                    throw new Error('A apărut o eroare la descărcarea fișierului CSV.');
-                }
-            })
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'all_products_report.csv';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(error => {
-                console.error('Eroare la descărcarea fișierului CSV:', error);
-            });
-    });
-});
 
-document.addEventListener("DOMContentLoaded", function() {
-    const downloadBtn = document.getElementById('downloadBtnPDF');
-    
-    downloadBtn.addEventListener('click', function() {
-        fetch("http://localhost:8000/download-pdf")
-            .then(response => {
-                if (response.ok) {
-                    return response.blob();
+        const downloadBtn = document.getElementById('downloadBtn');
+        const selectedFormat = document.querySelector('.selected');
+        const statisticsOptions = document.querySelectorAll('.menuu li');
+
+        downloadBtn.addEventListener('click', function() {
+            const selectedOption = document.querySelector('.menuu li.active');
+            const format = selectedOption.dataset.format;
+            const selectedStatistics = document.querySelector('.menuu li.active').innerText
+                .toLowerCase()
+                .replace(/\s/g, "_");
+            let downloadUrl, fileName;
+
+            if (selectedStatistics === "all_products") {
+                downloadUrl = `http://localhost:8000/downloadAllProducts-${format}`;
+                fileName = `all_products_report.${format}`;
+            } else {
+                downloadUrl = `http://localhost:8000/download${selectedStatistics}-${format}`;
+                fileName = `${selectedStatistics}_report.${format}`;
+            }
+
+            fetch(downloadUrl)
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    } else {
+                        throw new Error(`A apărut o eroare la descărcarea fișierului ${format.toUpperCase()}.`);
+                    }
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error(`Eroare la descărcarea fișierului ${format.toUpperCase()}:`, error);
+                });
+        });
+
+        statisticsOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const selectedStatistics = option.innerText.toLowerCase().replace(/\s/g, "_");
+                const selectedOption = document.querySelector('.menuu li.active');
+                const format = selectedOption.dataset.format;
+                let downloadUrl, fileName;
+
+                if (selectedStatistics === "all_products") {
+                    downloadUrl = `http://localhost:8000/downloadAllProducts-${format}`;
+                    fileName = `all_products_report.${format}`;
                 } else {
-                    throw new Error('A apărut o eroare la descărcarea fișierului PDF.');
+                    downloadUrl = `http://localhost:8000/download${selectedStatistics}-${format}`;
+                    fileName = `${selectedStatistics}_report.${format}`;
                 }
-            })
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'all_products_pdf.pdf';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(error => {
-                console.error('Eroare la descărcarea fișierului PDF:', error);
+
+                fetch(downloadUrl)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.blob();
+                        } else {
+                            throw new Error(`A apărut o eroare la descărcarea fișierului ${format.toUpperCase()}.`);
+                        }
+                    })
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error(`Eroare la descărcarea fișierului ${format.toUpperCase()}:`, error);
+                    });
             });
-    });
-});
+        });
 	</script>
 </body>
 </html>
