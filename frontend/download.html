@@ -87,7 +87,7 @@ dropdowns.forEach(dropdown => {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'product_report.csv';
+                a.download = 'all_products_report.csv';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);

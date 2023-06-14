@@ -15,5 +15,5 @@ module.exports = [
     { path: '/products/by-name', method: 'GET', controller: productController.getProductByName },
 
     // others
-    { path: '/download-csv', method: 'GET', controller: productController.generateProductReport  },
+    { path: '/download-csv', method: 'GET', controller: productController.generateProductCSV  },
 ];

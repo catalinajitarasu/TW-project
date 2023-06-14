@@ -1,4 +1,54 @@
 const Product = require('../models/productModel');
+const fs = require('fs');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
+exports.generateProductCSV = async (req, res) => {
+  try {
+    const products = await Product.find();
+    console.log('Produse găsite:', products);
+
+    // Generare fișier CSV
+    const csvWriter = createCsvWriter({
+      path: 'product_report.csv',
+      header: [
+        { id: 'name', title: 'Name' },
+        { id: 'description', title: 'Description' },
+        { id: 'price', title: 'Price' },
+        { id: 'type', title: 'Type' },
+      ],
+    });
+
+    await csvWriter.writeRecords(products);
+
+    // Descărcare fișier CSV
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="product_report.csv"');
+
+    const fileStream = fs.createReadStream('product_report.csv');
+    fileStream.pipe(res);
+
+    fileStream.on('end', () => {
+      // Șterge fișierul după ce a fost trimis cu succes
+      fs.unlink('product_report.csv', (err) => {
+        if (err) {
+          console.error('Eroare la ștergerea fișierului CSV:', err);
+        } else {
+          console.log('Fișierul CSV a fost șters cu succes.');
+        }
+      });
+    });
+
+    fileStream.on('error', (error) => {
+      console.error('Eroare la trimiterea fișierului CSV:', error);
+    });
+  } catch (error) {
+    console.error('Eroare la generarea fișierului CSV:', error);
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+  }
+};
+
 
 exports.addProduct = async (req, res) => {
     let body = '';
@@ -87,45 +137,6 @@ exports.getProductsByType = async (req, res) => {
 };
 
 
-const path = require('path');
-const fs = require('fs');
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-
-exports.generateProductReport = async (req, res) => {
-  try {
-    const products = await Product.find();
-
-    // Generare fișier CSV
-    const filePath = path.join(__dirname, '../reports/product_report.csv');
-    const csvWriter = createCsvWriter({
-      path: filePath,
-      header: [
-        { id: 'name', title: 'Name' },
-        { id: 'description', title: 'Description' },
-        { id: 'price', title: 'Price' },
-        { id: 'type', title: 'Type' },
-      ],
-    });
-
-    await csvWriter.writeRecords(products);
-
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="product_report.csv"');
-
-    res.download(filePath, 'product_report.csv', (error) => {
-      if (error) {
-        console.error('Eroare la trimiterea fișierului CSV:', error);
-      } else {
-        console.log('Fișierul CSV a fost trimis cu succes.');
-      }
-    });
-  } catch (error) {
-    console.error('Eroare la generarea fișierului CSV:', error);
-    res.setHeader('Content-Type', 'application/json');
-    res.statusCode = 500;
-    res.end(JSON.stringify({ error: 'Internal Server Error' }));
-  }
-};
 
 exports.getProductByName = async (req, res) => {
   try {
