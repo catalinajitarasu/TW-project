@@ -48,9 +48,10 @@ const userSchema = new Schema({
     preferences:{
         type: String,
     },
-    cart:{
-        type: Array
-    }
+    cart:[{
+        type: mongoose.Types.ObjectId,
+        ref: 'Product'
+    }]
 });
 
 module.exports = mongoose.model("User", userSchema);

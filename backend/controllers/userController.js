@@ -1,5 +1,7 @@
 const User = require("../models/userModel")
 const bcrypt = require('bcryptjs')
+const querystring = require('querystring');
+const url = require('url');
 
 exports.signUp = async(req, res)=>{
     let body = '';
@@ -113,3 +115,43 @@ exports.logIn = async(req, res)=>{
       }
     });
 }
+
+exports.getUserCart = async (req, res) => {
+  try {
+    const name = req.url; 
+    console.log('Query param - name:', name); 
+    const parsedUrl = url.parse(req.url);
+    const queryParams = querystring.parse(parsedUrl.query)
+    console.log(queryParams)
+
+
+    let user = await User.findOne({email: queryParams.userEmail}).populate('cart')
+    if(user === undefined || user === null){
+        res.statusCode=404
+        res.statusMessage="User not found!"
+        res.end()
+        return
+    }
+    console.log(user)
+
+
+    // if (typeof name !== 'undefined') {
+    //   console.log('Performing search by name...');
+    //   products = await Product.find({ name: name });
+    // } else {
+    //   console.log('Getting all products...');
+    //   products = await Product.find();
+    // }
+
+    // console.log('Products:', products); 
+
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 200;
+    res.end(JSON.stringify(user.cart));
+  } catch (error) {
+    console.log(error);
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+  }
+};

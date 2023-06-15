@@ -23,6 +23,7 @@ const server = http.createServer( async(req, res) => {
   console.log(parsedUrl.pathname)
   console.log(`routes ${routes}`)
   console.log(`req.method ${req.method}`)
+  console.log(`parsedUrl ${parsedUrl}`)
   const handler = routes.find(route => route.path === parsedUrl.pathname &&
                                        route.method === req.method);
   console.log(`handler ${handler}`)

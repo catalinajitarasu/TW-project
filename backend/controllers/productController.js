@@ -100,16 +100,10 @@ exports.addToCart = async (req, res) => {
         }
         console.log(user)
         user = user[0]
-        let currentCart = [];
-        if(!user.hasOwnProperty('cart'))
-          user.cart = [product._id]
-        else
-          user.cart.push(product._id)
+        user.cart.push(product._id)
+        console.log(2)
 
-        // user.cart = currentCart;
         const response = await user.save()
-        // console.log(newProduct);
-        // const savedProduct = await newProduct.save();
         console.log(`response ${response}`)
         res.status=201;
         res.end(JSON.stringify(response));
