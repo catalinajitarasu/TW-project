@@ -8,6 +8,8 @@ module.exports = [
     { path: '/login', method: 'POST', controller: userController.logIn },
     { path: '/sign-up', method: 'POST', controller: userController.signUp },
     { path: '/user/update', method: 'PATCH', controller: userController.updateUser },
+    { path: '/user/cart/remove', method: 'DELETE', controller: userController.removeCartProduct},
+    { path: '/user/cart/empty', method: 'DELETE', controller: userController.emptyCart},
 
     // products
     { path: '/products', method: 'GET', controller: productController.getProducts },

@@ -118,12 +118,9 @@ exports.logIn = async(req, res)=>{
 
 exports.getUserCart = async (req, res) => {
   try {
-    const name = req.url; 
-    console.log('Query param - name:', name); 
     const parsedUrl = url.parse(req.url);
     const queryParams = querystring.parse(parsedUrl.query)
     console.log(queryParams)
-
 
     let user = await User.findOne({email: queryParams.userEmail}).populate('cart')
     if(user === undefined || user === null){
@@ -134,17 +131,6 @@ exports.getUserCart = async (req, res) => {
     }
     console.log(user)
 
-
-    // if (typeof name !== 'undefined') {
-    //   console.log('Performing search by name...');
-    //   products = await Product.find({ name: name });
-    // } else {
-    //   console.log('Getting all products...');
-    //   products = await Product.find();
-    // }
-
-    // console.log('Products:', products); 
-
     res.setHeader('Content-Type', 'application/json');
     res.statusCode = 200;
     res.end(JSON.stringify(user.cart));
@@ -154,4 +140,69 @@ exports.getUserCart = async (req, res) => {
     res.statusCode = 500;
     res.end(JSON.stringify({ error: 'Internal Server Error' }));
   }
+};
+
+exports.emptyCart = async (req, res) => {
+  let body = '';
+  req.on('data', (chunk) => {
+    body +=chunk.toString();
+  });
+  req.on('end', async () => {
+  const data = JSON.parse(body)
+    try{
+      console.log(data)
+      let user = await User.findOne({email: data.userEmail})
+      if(user === undefined || user === null){
+          res.statusCode=404
+          res.statusMessage="User not found!"
+          res.end()
+          return
+      }
+
+      user.cart = []
+      await user.save()
+
+      res.end(JSON.stringify({message: 'Cart updated'}));
+    }
+    catch(error){
+      console.log(error)
+      res.statusCode = 500;
+      res.end();
+    }
+  });
+
+};
+
+exports.removeCartProduct = async (req, res) => {
+  let body = '';
+  req.on('data', (chunk) => {
+    body +=chunk.toString();
+  });
+  req.on('end', async () => {
+  const data = JSON.parse(body)
+    try{
+      console.log(data)
+      let user = await User.findOne({email: data.userEmail})
+      if(user === undefined || user === null){
+          res.statusCode=404
+          res.statusMessage="User not found!"
+          res.end()
+          return
+      }
+
+      const newCart = user.cart.filter(productId => productId.toString() !== data.productId.toString())
+      user.cart = newCart
+      console.log("FINAL USER")
+      console.log(user.cart)
+      await user.save()
+
+      res.end(JSON.stringify({message: 'Cart updated'}));
+    }
+    catch(error){
+      console.log(error)
+      res.statusCode = 500;
+      res.end();
+    }
+  });
+
 };

@@ -16,7 +16,7 @@
 	<div class="cart-container">
 		<div class="header">
 			<h3 class="heading">Shopping List</h3>
-			<h5 class="action">Remove all</h5>
+			<h5 class="action" onclick="emptyCart()">Remove all</h5>
 		</div>
 
 		<div id="cart-list">
@@ -34,6 +34,64 @@
     </div>
 
 	<script>
+        function emptyCart(){
+            fetch("http://localhost:8000/user/cart/empty", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userEmail: JSON.parse(localStorage.getItem('userData')).email})
+            }).then(response => {
+                console.log(response)
+                if (response.ok) {
+                    console.log("Data submitted successfully");
+                    return response.json();
+                } else {
+                    // alert(response.statusText)
+                    console.log(response)
+                    throw new Error(response.statusText);
+                }
+            }).then(data => {
+                console.log(data);
+                location.reload();
+            }).catch(error => {
+                // alert('Failed to contact the server')
+                alert(error)
+                console.error("Error:", error);
+                return false;
+            });
+        }
+        function removeFromCart(productId){
+            fetch("http://localhost:8000/user/cart/remove", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    userEmail: JSON.parse(localStorage.getItem('userData')).email})
+            }).then(response => {
+                console.log(response)
+                if (response.ok) {
+                    console.log("Data submitted successfully");
+                    return response.json();
+                } else {
+                    // alert(response.statusText)
+                    console.log(response)
+                    throw new Error(response.statusText);
+                }
+            }).then(data => {
+                console.log(data);
+                location.reload();
+            }).catch(error => {
+                // alert('Failed to contact the server')
+                alert(error)
+                console.error("Error:", error);
+                return false;
+            });
+        }
+
         const userEmail = JSON.parse(localStorage.getItem('userData')).email
 		fetch(`http://localhost:8000/user/cart?userEmail=${userEmail}`)
         .then(response => response.json())
@@ -91,6 +149,9 @@
                 const remove = document.createElement('div');
                 remove.classList.add('remove');
                 remove.textContent = 'Remove';
+                remove.onclick = function(){
+                    removeFromCart(product._id)
+                }
                 prices.appendChild(amount)
                 prices.appendChild(save)
                 prices.appendChild(remove)
