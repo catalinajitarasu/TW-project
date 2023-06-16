@@ -115,6 +115,46 @@ exports.addToCart = async (req, res) => {
   });
 };
 
+exports.addToFavorites = async (req, res) => {
+  let body = '';
+  req.on('data', (chunk) => {
+    body +=chunk.toString();
+  });
+  req.on('end', async () => {
+    const data = JSON.parse(body);
+    try {
+      console.log("add to favorites")
+      const product = await Product.findById(data.productId);
+      if(product === undefined || product === null){
+        res.statusCode=404
+        res.statusMessage="Product not found!"
+        res.end()
+        return
+      }
+      let user = await User.find({email: data.userEmail});
+      if(user === undefined || user === null){
+        res.statusCode=404
+        res.statusMessage="User not found!"
+        res.end()
+        return
+      }
+      console.log(user)
+      user = user[0]
+      user.favorites.push(product._id)
+      console.log(2)
+
+      const response = await user.save()
+      console.log(`response ${response}`)
+      res.status=201;
+      res.end(JSON.stringify(response));
+    } catch (error) {
+      console.log(error)
+      res.statusCode = 500;
+      res.end(JSON.stringify(error));
+    }
+});
+};
+
 // exports.getProducts = async (req, res) => {
 //   try {
 //     const products = await Product.find();

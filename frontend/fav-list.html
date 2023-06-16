@@ -16,38 +16,129 @@
    <div class="cart-container">
    	   <div class="header">
    	   	<h3 class="heading">Favorites</h3>
-   	   	<h5 class="action">Remove all</h5>
+   	   	<h5 class="action" onclick="emptyFav()">Remove all</h5>
    	   </div>
 
-   	   <div class="cart-items">
-   	   	  <div class="image-box">
-   	   	  	<img src="marr.png" alt="mar">
-   	   	  </div>
-   	   	  <div class="about">
-   	   	  	<h1 class="title">Apple</h1>
-   	   	  	<h3 class="subtitle">50g</h3>
-   	   	  </div>
-   	   	  <div class="prices">
-   	   	  	<div class="amount">3 RON</div>
-   	   	  	<div class="save"><u>Add to shopping list</u></div>
-   	   	  	<div class="remove"><u>Remove</u></div>
-   	   	  </div>
-   	   </div>
-
-   	   <div class="cart-items pad">
-   	   	  <div class="image-box">
-   	   	  	<img src="para.png" alt="para">
-   	   	  </div>
-   	   	  <div class="about">
-   	   	  	<h1 class="title">Pear</h1>
-   	   	  	<h3 class="subtitle">40g</h3>
-   	   	  </div>
-   	   	  <div class="prices">
-   	   	  	<div class="amount">4 RON</div>
-   	   	  	<div class="save"><u>Add to shopping list</u></div>
-   	   	  	<div class="remove"><u>Remove</u></div>
-   	   	  </div>
+   	   <div class="favorites-list">
    	   </div>
    </div>
+
+   <script>
+	function emptyFav(){
+		fetch("http://localhost:8000/user/favorites/empty", {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				userEmail: JSON.parse(localStorage.getItem('userData')).email})
+		}).then(response => {
+			console.log(response)
+			if (response.ok) {
+				console.log("Data submitted successfully");
+				return response.json();
+			} else {
+				// alert(response.statusText)
+				console.log(response)
+				throw new Error(response.statusText);
+			}
+		}).then(data => {
+			console.log(data);
+			location.reload();
+		}).catch(error => {
+			// alert('Failed to contact the server')
+			alert(error)
+			console.error("Error:", error);
+			return false;
+		});
+	}
+	function removeFromFav(productId){
+		fetch("http://localhost:8000/user/favorites/remove", {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				productId: productId,
+				userEmail: JSON.parse(localStorage.getItem('userData')).email})
+		}).then(response => {
+			console.log(response)
+			if (response.ok) {
+				console.log("Data submitted successfully");
+				return response.json();
+			} else {
+				// alert(response.statusText)
+				console.log(response)
+				throw new Error(response.statusText);
+			}
+		}).then(data => {
+			console.log(data);
+			location.reload();
+		}).catch(error => {
+			// alert('Failed to contact the server')
+			alert(error)
+			console.error("Error:", error);
+			return false;
+		});
+	}
+
+	const userEmail = JSON.parse(localStorage.getItem('userData')).email
+	fetch(`http://localhost:8000/user/favorites?userEmail=${userEmail}`)
+	.then(response => response.json())
+	.then(products => {
+		console.log(products)
+		const favList = document.getElementById('favorites-list');
+		
+		products.forEach(product => {
+			const productItem = document.createElement('div');
+			productItem.classList.add('favorites-items', 'pad');
+
+			const imageBox = document.createElement('div');
+			imageBox.classList.add('image-box');
+			const image = document.createElement('img');
+			image.src = product.photo;
+			image.alt = product.name;
+			imageBox.appendChild(image);
+
+			const about = document.createElement('div');
+			about.classList.add('about');
+			const name = document.createElement('h1');
+			name.classList.add('title');
+			name.textContent = product.name;
+			const subtitle = document.createElement('h3');
+			subtitle.classList.add('subtitle');
+			subtitle.textContent = product.description;
+			about.appendChild(name);
+			about.appendChild(subtitle);
+
+			
+
+			const prices = document.createElement('div')
+			prices.classList.add('prices');
+			const amount = document.createElement('div');
+			amount.classList.add('amount');
+			amount.textContent = product.price + ' RON';
+			const save = document.createElement('div');
+			save.classList.add('save');
+			save.textContent = 'Add to cart';
+			const remove = document.createElement('div');
+			remove.classList.add('remove');
+			remove.textContent = 'Remove';
+			remove.onclick = function(){
+				removeFromFav(product._id)
+			}
+			prices.appendChild(amount)
+			prices.appendChild(save)
+			prices.appendChild(remove)
+
+			productItem.appendChild(imageBox);
+			productItem.appendChild(about);
+			productItem.appendChild(counter);
+			productItem.appendChild(prices);
+
+			favList.appendChild(productItem);
+		});
+	});
+</script>
 </body>
 </html>

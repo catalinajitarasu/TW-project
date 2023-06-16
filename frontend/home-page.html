@@ -48,6 +48,40 @@
                 });
         }
 
+        function addToFavorites( product){
+            
+            console.log(product)
+            fetch("http://localhost:8000/products/add-to-favorites", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        productId: product._id,
+                        userEmail: JSON.parse(localStorage.getItem('userData')).email})
+                }).then(response => {
+                    console.log(response)
+                    if (response.ok) {
+                        console.log("Data submitted successfully");
+                        return response.json();
+                    } else {
+                        alert(response.statusText)
+                        console.log(response)
+                        throw new Error(response.statusText);
+                    }
+                }).then(data => {
+                    console.log(data);
+                    // window.location.href ='../home-page.html'
+                    var currentPath = window.location.pathname;
+            var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'fav-list.html';
+            window.location.href = newPath;
+                }).catch(error => {
+                    // alert('Failed to contact the server')
+                    console.error("Error:", error);
+                    return false;
+                });
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             fetch("http://localhost:8000/products")
                 .then(response => response.json())
@@ -133,8 +167,15 @@
 
                         //Adaugarea butonului pentru adaugare la favorite
                         var favButton = document.createElement("button");
+                        // favButton.className = "favorite-button";
+                        // favButton.textContent = "Add to favorites";
+                        // previewDiv.appendChild(favButton);
+                        favButton.onclick = function() {
+                            addToFavorites(product);
+                            };
+                        // buyButton.id = "buyBtn";
                         favButton.className = "favorite-button";
-                        favButton.textContent = "Add to favorites";
+                        favButton.textContent = "Add to favorite";
                         previewDiv.appendChild(favButton);
 
                         // Adăugarea produsului în containerul menu-preview

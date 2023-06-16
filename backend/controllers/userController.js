@@ -206,3 +206,95 @@ exports.removeCartProduct = async (req, res) => {
   });
 
 };
+
+
+exports.getUserFavorites = async (req, res) => {
+  try {
+    const parsedUrl = url.parse(req.url);
+    const queryParams = querystring.parse(parsedUrl.query)
+    console.log(queryParams)
+
+    let user = await User.findOne({email: queryParams.userEmail}).populate('favorites')
+    if(user === undefined || user === null){
+        res.statusCode=404
+        res.statusMessage="User not found!"
+        res.end()
+        return
+    }
+    console.log(user)
+
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 200;
+    res.end(JSON.stringify(user.favorites));
+  } catch (error) {
+    console.log(error);
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+  }
+};
+
+exports.emptyFavorites = async (req, res) => {
+  let body = '';
+  req.on('data', (chunk) => {
+    body +=chunk.toString();
+  });
+  req.on('end', async () => {
+  const data = JSON.parse(body)
+    try{
+      console.log(data)
+      let user = await User.findOne({email: data.userEmail})
+      if(user === undefined || user === null){
+          res.statusCode=404
+          res.statusMessage="User not found!"
+          res.end()
+          return
+      }
+
+      user.favorites = []
+      await user.save()
+
+      res.end(JSON.stringify({message: 'Favorites list updated'}));
+    }
+    catch(error){
+      console.log(error)
+      res.statusCode = 500;
+      res.end();
+    }
+  });
+
+};
+
+exports.removeFavoritesProduct = async (req, res) => {
+  let body = '';
+  req.on('data', (chunk) => {
+    body +=chunk.toString();
+  });
+  req.on('end', async () => {
+  const data = JSON.parse(body)
+    try{
+      console.log(data)
+      let user = await User.findOne({email: data.userEmail})
+      if(user === undefined || user === null){
+          res.statusCode=404
+          res.statusMessage="User not found!"
+          res.end()
+          return
+      }
+
+      const newFavorites = user.favorites.filter(productId => productId.toString() !== data.productId.toString())
+      user.favorites = newFavorites
+      console.log("FINAL USER")
+      console.log(user.favorites)
+      await user.save()
+
+      res.end(JSON.stringify({message: 'Favorites list updated'}));
+    }
+    catch(error){
+      console.log(error)
+      res.statusCode = 500;
+      res.end();
+    }
+  });
+
+};
