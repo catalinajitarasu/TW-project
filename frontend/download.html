@@ -75,22 +75,29 @@ dropdowns.forEach(dropdown => {
         const downloadBtn = document.getElementById('downloadBtn');
         const selectedFormat = document.querySelector('.selected');
         const statisticsOptions = document.querySelectorAll('.menuu li');
+        const userEmail = JSON.parse(localStorage.getItem('userData')).email;
 
         downloadBtn.addEventListener('click', function() {
             const selectedOption = document.querySelector('.menuu li.active');
             const format = selectedOption.dataset.format;
             const selectedStatistics = document.querySelector('.menuu li.active').innerText
                 .toLowerCase()
-                .replace(/\s/g, "_");
+                .replace(/\s/g, "_")
+                .replace(/-/g, "");
             let downloadUrl, fileName;
 
             if (selectedStatistics === "all_products") {
                 downloadUrl = `http://localhost:8000/downloadAllProducts-${format}`;
                 fileName = `all_products_report.${format}`;
-            } else {
-                downloadUrl = `http://localhost:8000/download${selectedStatistics}-${format}`;
-                fileName = `${selectedStatistics}_report.${format}`;
+            } 
+            else if(selectedStatistics === "favorites_products") {
+                downloadUrl = `http://localhost:8000/downloadFavoritesProducts-${format}?userEmail=${userEmail}`;
+                fileName = `favorites_products_report.${format}`;
             }
+            //    else {
+            //     downloadUrl = `http://localhost:8000/download${selectedStatistics}-${format}`;
+            //     fileName = `${selectedStatistics}_report.${format}`;
+            // }
 
             fetch(downloadUrl)
                 .then(response => {
@@ -125,10 +132,16 @@ dropdowns.forEach(dropdown => {
                 if (selectedStatistics === "all_products") {
                     downloadUrl = `http://localhost:8000/downloadAllProducts-${format}`;
                     fileName = `all_products_report.${format}`;
-                } else {
-                    downloadUrl = `http://localhost:8000/download${selectedStatistics}-${format}`;
-                    fileName = `${selectedStatistics}_report.${format}`;
-                }
+                } 
+                else if(selectedStatistics === "favorites_products") {
+                downloadUrl = `http://localhost:8000/downloadFavoritesProducts-${format}?userEmail=${userEmail}`;
+                fileName = `favorites_products_report.${format}`;
+
+            }
+                // else {
+                //     downloadUrl = `http://localhost:8000/download${selectedStatistics}-${format}`;
+                //     fileName = `${selectedStatistics}_report.${format}`;
+                // }
 
                 fetch(downloadUrl)
                     .then(response => {

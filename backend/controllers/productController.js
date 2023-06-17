@@ -301,3 +301,50 @@ exports.generateProductPDF = async (req, res) => {
     res.end(JSON.stringify({ error: 'Internal Server Error' }));
   }
 };
+
+
+exports.generateUserFavoritesPDF = async (req, res) => {
+    try {
+      const userEmail = req.query.userEmail; // Extrage adresa de email din URL
+      console.log('User email:', userEmail);
+      let user = await User.findOne({ email: userEmail });
+
+      if (!user) {
+        res.setHeader('Content-Type', 'application/json');
+        res.statusCode = 404;
+        res.end(JSON.stringify({ error: 'Utilizatorul nu a fost găsit.' }));
+        return;
+      }
+
+      const favoriteProducts = await Product.find({ _id: { $in: user.favorites } });
+
+      console.log('Favorite products:', favoriteProducts);
+
+      const pdf = new PDFDocument();
+      const pdfStream = fs.createWriteStream('user_favorites.pdf');
+      pdf.pipe(pdfStream);
+
+      pdf.fontSize(18).text('Raport produse favorite', { align: 'center' });
+      pdf.moveDown();
+
+      favoriteProducts.forEach((product) => {
+        pdf.fontSize(12).text(`Nume: ${product.name}`);
+        pdf.fontSize(10).text(`Descriere: ${product.description}`);
+        pdf.fontSize(10).text(`Preț: ${product.price}`);
+        pdf.fontSize(10).text(`Tip: ${product.type}`);
+        pdf.moveDown();
+      });
+
+      pdf.end();
+
+      pdfStream.on('finish', () => {
+        res.setHeader('Content-Type', 'application/pdf');
+        fs.createReadStream('user_favorites.pdf').pipe(res);
+      });
+    } catch (error) {
+      console.log(error);
+      res.statusCode = 500;
+      res.end();
+    }
+};
+

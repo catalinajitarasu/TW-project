@@ -26,4 +26,7 @@ module.exports = [
     // others
     { path: '/downloadAllProducts-csv', method: 'GET', controller: productController.generateProductCSV },
     { path: '/downloadAllProducts-pdf', method: 'GET', controller: productController.generateProductPDF },
+    { path: '/downloadFavoritesProducts-csv', method: 'GET', controller: productController.generateUserFavoritesCSV },
+    { path: '/downloadFavoritesProducts-pdf', method: 'GET', controller: productController.generateUserFavoritesPDF }
+
 ];
