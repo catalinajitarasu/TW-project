@@ -73,8 +73,8 @@
                     console.log(data);
                     // window.location.href ='../home-page.html'
                     var currentPath = window.location.pathname;
-            var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'fav-list.html';
-            window.location.href = newPath;
+                    var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'fav-list.html';
+                    window.location.href = newPath;
                 }).catch(error => {
                     // alert('Failed to contact the server')
                     console.error("Error:", error);

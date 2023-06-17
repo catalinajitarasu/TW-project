@@ -19,7 +19,7 @@
    	   	<h5 class="action" onclick="emptyFav()">Remove all</h5>
    	   </div>
 
-   	   <div class="favorites-list">
+   	   <div class="favorites-list" id="favorites-list">
    	   </div>
    </div>
 
@@ -91,7 +91,7 @@
 		
 		products.forEach(product => {
 			const productItem = document.createElement('div');
-			productItem.classList.add('favorites-items', 'pad');
+			productItem.classList.add('cart-items', 'pad');
 
 			const imageBox = document.createElement('div');
 			imageBox.classList.add('image-box');
@@ -111,7 +111,6 @@
 			about.appendChild(name);
 			about.appendChild(subtitle);
 
-			
 
 			const prices = document.createElement('div')
 			prices.classList.add('prices');
@@ -133,7 +132,7 @@
 
 			productItem.appendChild(imageBox);
 			productItem.appendChild(about);
-			productItem.appendChild(counter);
+			// productItem.appendChild(counter);
 			productItem.appendChild(prices);
 
 			favList.appendChild(productItem);
