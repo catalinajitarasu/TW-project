@@ -42,12 +42,12 @@ const userSchema = new Schema({
     diet:{
         type: String,
     },
-    allergies:{
+    allergies:[{
         type: String,
-    },
-    preferences:{
+    }],
+    preferences:[{
         type: String,
-    },
+    }],
     cart:[{
         type: mongoose.Types.ObjectId,
         ref: 'Product'

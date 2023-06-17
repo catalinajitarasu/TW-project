@@ -3,6 +3,38 @@ const bcrypt = require('bcryptjs')
 const querystring = require('querystring');
 const url = require('url');
 
+
+exports.getUser = async (req, res) => {
+  try {
+    const parsedUrl = url.parse(req.url);
+    const queryParams = querystring.parse(parsedUrl.query)
+    console.log(queryParams)
+
+    let user = await User.findOne({email: queryParams.userEmail})
+    if(user === undefined || user === null){
+        res.statusCode=404
+        res.statusMessage="User not found!"
+        res.end()
+        return
+    }
+    console.log(user)
+    user = user.toObject({getters: true})
+    delete user.password
+    delete user.favorites
+    delete user.cart
+
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 200;
+    res.end(JSON.stringify(user));
+  } catch (error) {
+    console.log(error);
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+  }
+};
+
+
 exports.signUp = async(req, res)=>{
     let body = '';
     req.on('data', (chunk) => {

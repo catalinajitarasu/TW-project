@@ -40,8 +40,10 @@
             var city = document.getElementById("city").value;
             var country = document.getElementById("country").value;
             var diet = document.getElementById("diet").value;
-            var allergies = document.getElementById("allergies").value;
-            var preferences = document.getElementById("preferences").value;
+            var allergiesElements = document.querySelectorAll("#allergies input[name='allergies']:checked");
+            var allergies = Array.from(allergiesElements).map(checkbox => checkbox.value);
+            var preferencesElements = document.querySelectorAll("#preferences input[name='preferences']:checked");
+            var preferences = Array.from(preferencesElements).map(checkbox => checkbox.value);
             if (password !== confirmPassword) {
                 alert("Passwords do not match!");
                 return;
@@ -136,14 +138,33 @@
                     <option value="pescatarian">Pescatarian</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label for="allergies">Allergies:</label>
-                <input type="text" id="allergies" name="allergies" placeholder="Ex. gluten, lactose, peanuts">
+            <div class="input-group" id="allergies">
+                <label>Allergies:</label>
+                <label><input type="checkbox" name="allergies" value="gluten"> Gluten</label>
+                <label><input type="checkbox" name="allergies" value="lactose"> Lactose</label>
+                <label><input type="checkbox" name="allergies" value="peanuts"> Peanuts</label>
+                <label><input type="checkbox" name="allergies" value="shellfish"> Shellfish</label>
+                <label><input type="checkbox" name="allergies" value="soy"> Soy</label>
+                <label><input type="checkbox" name="allergies" value="wheat"> Wheat</label>
+                <label><input type="checkbox" name="allergies" value="eggs"> Eggs</label>
+                <label><input type="checkbox" name="allergies" value="fish"> Fish</label>
             </div>
-            <div class="input-group">
-                <label for="preferences">Preferences:</label>
-                <input type="text" id="preferences" name="preferences" placeholder="Ex. italian, asiatic">
+            <div class="input-group" id="preferences">
+                <label>Preferences:</label>
+                <label><input type="checkbox" name="preferences" value="Italian"> Italian</label>
+                <label><input type="checkbox" name="preferences" value="Asian"> Asian</label>
+                <label><input type="checkbox" name="preferences" value="Mexican"> Mexican</label>
+                <label><input type="checkbox" name="preferences" value="French"> French</label>
+                <label><input type="checkbox" name="preferences" value="Indian"> Indian</label>
+                <label><input type="checkbox" name="preferences" value="Mediterranean"> Mediterranean</label>
+                <label><input type="checkbox" name="preferences" value="Spanish"> Spanish</label>
+                <label><input type="checkbox" name="preferences" value="American"> American</label>
+                <label><input type="checkbox" name="preferences" value="British"> British</label>
+                <label><input type="checkbox" name="preferences" value="African"> African</label>
+                <label><input type="checkbox" name="preferences" value="Turkish"> Turkish</label>
+                <label><input type="checkbox" name="preferences" value="Lebanese"> Lebanese</label>
             </div>
+            
             <button type="submit">Sign Up</button>
         </form>
         <br/>

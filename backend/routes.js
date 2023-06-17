@@ -4,6 +4,7 @@ const productController = require('./controllers/productController');
 
 module.exports = [
     // user
+    { path: '/user', method: 'GET', controller: userController.getUser},
     { path: '/user/cart', method: 'GET', controller: userController.getUserCart},
     { path: '/user/favorites', method: 'GET', controller: userController.getUserFavorites},
     { path: '/login', method: 'POST', controller: userController.logIn },
