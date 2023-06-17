@@ -16,15 +16,13 @@ body{
 }
 
 .cart-container {
-  flex-wrap: wrap;
   align-self: center;
   align-items: center;
-	width: 80%;
-	min-height: 70%;
-	background-color: #fff;
+  width: 80%;
+  background-color: #fff;
   border-radius: 25px;
   box-shadow: 0 10px 20px #1687d933;
-  
+  padding-bottom: 5%;
 }
 
 .header{

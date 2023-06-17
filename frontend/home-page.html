@@ -93,7 +93,7 @@
                         // Crearea div-ului pentru produsul din menu-container
                         var menuDiv = document.createElement("div");
                         menuDiv.className = "menu";
-                        menuDiv.setAttribute("data-name", product.id);
+                        menuDiv.setAttribute("data-name", product._id);
 
                         // Adăugarea imaginii
                         var img = document.createElement("img");
@@ -120,7 +120,7 @@
                         // Crearea div-ului pentru produsul din menu-preview
                         var previewDiv = document.createElement("div");
                         previewDiv.className = "preview";
-                        previewDiv.setAttribute("data-target", product.id);
+                        previewDiv.setAttribute("data-target", product._id);
 
                         // Adăugarea butonului de închidere
                         var closeButton = document.createElement("button");
@@ -187,7 +187,7 @@
                     let previewBox = previewMenu.querySelectorAll('.preview');
 
                     document.querySelectorAll('.menu-container .menu').forEach(product => {
-                     product.onclick = () => {
+                    product.onclick = () => {
                             previewMenu.style.display = 'flex';
                             let name = product.getAttribute('data-name');
                             previewBox.forEach(preview => {
@@ -235,7 +235,7 @@
                             data.forEach(product => {
                                 var menuDiv = document.createElement("div");
                                 menuDiv.className = "menu";
-                                menuDiv.setAttribute("data-name", product.id);
+                                menuDiv.setAttribute("data-name", product._id);
 
                                 var img = document.createElement("img");
                                 img.src = product.photo;
