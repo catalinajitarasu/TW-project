@@ -20,15 +20,15 @@
                     <div class="caret"></div>
                 </div>
                 <ul class="menuu">
-                    <li allergy="any">any</li>
-                    <li allergy="gluten">gluten</li>
-                    <li allergy="lactose">lactose</li>
-                    <li allergy="peanuts">peanuts</li>
-                    <li allergy="shellfish">shellfish</li>
-                    <li allergy="soy">soy</li>
-                    <li allergy="wheat">wheat</li>
-                    <li allergy="eggs">eggs</li>
-                    <li allergy="fish">fish</li>
+                    <li val="allergy">Any</li>
+                    <li val="allergy">Gluten</li>
+                    <li val="allergy">Lactose</li>
+                    <li val="allergy">Peanuts</li>
+                    <li val="allergy">Shellfish</li>
+                    <li val="allergy">Soy</li>
+                    <li val="allergy">Wheat</li>
+                    <li val="allergy">Eggs</li>
+                    <li val="allergy">Fish</li>
                 </ul>
             </div>
             <div class="dropdown">
@@ -37,28 +37,33 @@
                     <div class="caret"></div>
                 </div>
                 <ul class="menuu">
-                    <li>Italian</li>
-                    <li>Italian</li>
-                    <li>Asian</li>
-                    <li>Mexican</li>
-                    <li>French</li>
-                    <li>Indian</li>
-                    <li>Mediterranean</li>
-                    <li>Spanish</li>
-                    <li>American</li>
-                    <li>British</li>
-                    <li>African</li>
-                    <li>Turkish</li>
-                    <li>Lebanese</li>
+                    <li val="preference">Any</li>
+                    <li val="preference">Italian</li>
+                    <li val="preference">Asian</li>
+                    <li val="preference">Mexican</li>
+                    <li val="preference">French</li>
+                    <li val="preference">Indian</li>
+                    <li val="preference">Mediterranean</li>
+                    <li val="preference">Spanish</li>
+                    <li val="preference">American</li>
+                    <li val="preference">British</li>
+                    <li val="preference">African</li>
+                    <li val="preference">Turkish</li>
+                    <li val="preference">Lebanese</li>
                 </ul>
             </div>
-            <button id="downloadBtn">Download</button>
+            <!-- <button id="downloadBtn" type="submit">Download</button> -->
         </ul>
     </div>
+    <br/>
     <div class="container">
         <h3 class="headeing">Choose a group!</h3> 
+        <p>Find what other people like. Just select the allergy and specific</p>
+        <div class="menu-container">   
+        </div>
+        <div class="menu-preview">
+        </div>
     </div>
-
     <script>
 		const dropdowns = document.querySelectorAll('.dropdown');
 
@@ -66,10 +71,10 @@
             const select = dropdown.querySelector('.select');
             const caret = dropdown.querySelector('.caret');
             const menuu = dropdown.querySelector('.menuu');
-            const options = dropdown.querySelector('.menu li');
+            const options = dropdown.querySelectorAll('.menuu li');
             const selected = dropdown.querySelector('.selected');
 
-            select.addEventListener('click', ()=>{
+            select.addEventListener('click', () => {
                 select.classList.toggle('select-clicked');
                 caret.classList.toggle('caret-rotate');
                 menuu.classList.toggle('menu-open');
@@ -88,6 +93,231 @@
                 });
             });
         });
+
+        const groupOptions = document.querySelectorAll('.menuu li');
+        const userEmail = JSON.parse(localStorage.getItem('userData')).email;
+        let preference, allergy;
+
+        groupOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // const selectedOption = document.querySelector('.menuu li.active');
+                var value = option.getAttribute('val');
+                if (value === "allergy"){
+                    allergy = option.innerText
+                }
+                if (value === "preference"){
+                    preference = option.innerText
+                }
+            console.log("preference, allergy;")
+            console.log(preference)
+            console.log(allergy);
+            
+            if(preference && allergy){
+                getProducts(preference, allergy)
+            }
+        });
+    });
+	
+        function getProducts(preference, allergy){
+            document.querySelector(".menu-container").innerHTML = ''
+            document.querySelector(".menu-preview").innerHTML = ''
+            console.log(`http://localhost:8000/products?preference=${preference}&allergy=${allergy}`)
+            fetch(`http://localhost:8000/products?preference=${preference}&allergy=${allergy}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Data received:", data);
+                    
+                    // Parcurgem fiecare produs din răspunsul primit
+                    data.forEach(product => {
+                        // Crearea div-ului pentru produsul din menu-container
+                        var menuDiv = document.createElement("div");
+                        menuDiv.className = "menu";
+                        menuDiv.setAttribute("data-name", product._id);
+
+                        // Adăugarea imaginii
+                        var img = document.createElement("img");
+                        img.src = product.photo;
+                        img.alt = product.name;
+                        menuDiv.appendChild(img);
+
+                        // Adăugarea numelui
+                        var name = document.createElement("h3");
+                        name.textContent = product.name;
+                        menuDiv.appendChild(name);
+
+                        // Adăugarea prețului
+                        var price = document.createElement("div");
+                        price.className = "price";
+                        price.textContent = product.price + " lei";
+                        menuDiv.appendChild(price);
+
+                        // Adăugarea produsului în containerul menu-container
+                        document.querySelector(".menu-container").appendChild(menuDiv);
+
+                        // Cream elementele HTML corespunzătoare pentru fiecare produs și adăugam în containerul menu-preview
+
+                        // Crearea div-ului pentru produsul din menu-preview
+                        var previewDiv = document.createElement("div");
+                        previewDiv.className = "preview";
+                        previewDiv.setAttribute("data-target", product._id);
+
+                        // Adăugarea butonului de închidere
+                        var closeButton = document.createElement("button");
+                        closeButton.className = "close-button";
+                        closeButton.innerHTML = "&times;";
+                        previewDiv.appendChild(closeButton);
+
+                        // Adăugarea imaginii
+                        var imgPreview = document.createElement("img");
+                        imgPreview.src = product.photo;
+                        imgPreview.alt = product.name;
+                        previewDiv.appendChild(imgPreview);
+
+                        // Adăugarea numelui
+                        var namePreview = document.createElement("h3");
+                        namePreview.textContent = product.name;
+                        previewDiv.appendChild(namePreview);
+
+                        // Adăugarea descrierii
+                        var description = document.createElement("p");
+                        description.textContent = product.description;
+                        previewDiv.appendChild(description);
+
+                        // Adăugarea prețului
+                        var pricePreview = document.createElement("div");
+                        pricePreview.className = "price";
+                        pricePreview.textContent = product.price + " lei";
+                        previewDiv.appendChild(pricePreview);
+
+                        // Adăugarea tipului
+                        var typePreview = document.createElement("p");
+                        typePreview.textContent = product.type;
+                        previewDiv.appendChild(typePreview);
+
+                        // Adăugarea link-ului de adăugare în coș
+                        var buyButton = document.createElement("button");
+                        buyButton.onclick = function() {
+                            addToCart(product);
+                            };
+                        // buyButton.id = "buyBtn";
+                        buyButton.className = "favorite-button";
+                        buyButton.textContent = "Add to cart";
+                        previewDiv.appendChild(buyButton);
+
+                        //Adaugarea butonului pentru adaugare la favorite
+                        var favButton = document.createElement("button");
+                        // favButton.className = "favorite-button";
+                        // favButton.textContent = "Add to favorites";
+                        // previewDiv.appendChild(favButton);
+                        favButton.onclick = function() {
+                            addToFavorites(product);
+                            };
+                        // buyButton.id = "buyBtn";
+                        favButton.className = "favorite-button";
+                        favButton.textContent = "Add to favorite";
+                        previewDiv.appendChild(favButton);
+
+                        // Adăugarea produsului în containerul menu-preview
+                        document.querySelector(".menu-preview").appendChild(previewDiv);
+                    });
+
+                    // Adăugarea evenimentului de clic pentru elementele de previzualizare
+                    let previewMenu = document.querySelector('.menu-preview');
+                    let previewBox = previewMenu.querySelectorAll('.preview');
+
+                    document.querySelectorAll('.menu-container .menu').forEach(product => {
+                    product.onclick = () => {
+                            previewMenu.style.display = 'flex';
+                            let name = product.getAttribute('data-name');
+                            previewBox.forEach(preview => {
+                             let target = preview.getAttribute('data-target');
+                              if (name === target) {
+                               preview.classList.add('active');
+                           }
+                      });
+                    };
+                   });
+                   previewBox.forEach(close => {
+                        close.querySelector('.close-button').onclick = () => {
+                        close.classList.remove('active');
+                        previewMenu.style.display = 'none';
+                       };
+                    });
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+
+        }
+        
+        function addToCart( product){
+            // var buyButton = document.getElementById("buyBtn");
+            // event.preventDefault()
+            console.log(product)
+            fetch("http://localhost:8000/products/add-to-cart", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        productId: product._id,
+                        userEmail: JSON.parse(localStorage.getItem('userData')).email})
+                }).then(response => {
+                    console.log(response)
+                    if (response.ok) {
+                        console.log("Data submitted successfully");
+                        return response.json();
+                    } else {
+                        alert(response.statusText)
+                        console.log(response)
+                        throw new Error(response.statusText);
+                    }
+                }).then(data => {
+                    console.log(data);
+                    // window.location.href ='../home-page.html'
+                    var currentPath = window.location.pathname;
+            var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'shopping-list.html';
+            window.location.href = newPath;
+                }).catch(error => {
+                    // alert('Failed to contact the server')
+                    console.error("Error:", error);
+                    return false;
+                });
+        }
+
+        function addToFavorites( product){
+            
+            fetch("http://localhost:8000/products/add-to-favorites", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        productId: product._id,
+                        userEmail: JSON.parse(localStorage.getItem('userData')).email})
+                }).then(response => {
+                    console.log(response)
+                    if (response.ok) {
+                        console.log("Data submitted successfully");
+                        return response.json();
+                    } else {
+                        alert(response.statusText)
+                        console.log(response)
+                        throw new Error(response.statusText);
+                    }
+                }).then(data => {
+                    console.log(data);
+                    // window.location.href ='../home-page.html'
+                    var currentPath = window.location.pathname;
+                    var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'fav-list.html';
+                    window.location.href = newPath;
+                }).catch(error => {
+                    // alert('Failed to contact the server')
+                    console.error("Error:", error);
+                    return false;
+                });
+        }
+
 	</script>
 </body>
 </html>
