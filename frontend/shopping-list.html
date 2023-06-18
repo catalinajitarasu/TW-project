@@ -62,6 +62,37 @@
                 return false;
             });
         }
+        function changeQuantity(productId, quantity){
+            fetch("http://localhost:8000/user/cart/change-quantity", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: quantity,
+                    userEmail: JSON.parse(localStorage.getItem('userData')).email})
+            }).then(response => {
+                console.log(response)
+                if (response.ok) {
+                    console.log("Data submitted successfully");
+                    return response.json();
+                } else {
+                    // alert(response.statusText)
+                    console.log(response)
+                    throw new Error(response.statusText);
+                }
+            }).then(data => {
+                console.log(data);
+                location.reload();
+            }).catch(error => {
+                // alert('Failed to contact the server')
+                alert(error)
+                console.error("Error:", error);
+                return false;
+            });
+        }
+
         function removeFromCart(productId){
             fetch("http://localhost:8000/user/cart/remove", {
                 method: "DELETE",
@@ -101,25 +132,25 @@
             const cartList = document.getElementById('cart-list');
             
             products.forEach(product => {
-                totalPayment += product.price
+                totalPayment += product.data.price
                 const productItem = document.createElement('div');
                 productItem.classList.add('cart-items', 'pad');
 
                 const imageBox = document.createElement('div');
                 imageBox.classList.add('image-box');
                 const image = document.createElement('img');
-                image.src = product.photo;
-                image.alt = product.name;
+                image.src = product.data.photo;
+                image.alt = product.data.name;
                 imageBox.appendChild(image);
 
                 const about = document.createElement('div');
                 about.classList.add('about');
                 const name = document.createElement('h1');
                 name.classList.add('title');
-                name.textContent = product.name;
+                name.textContent = product.data.name;
                 const subtitle = document.createElement('h3');
                 subtitle.classList.add('subtitle');
-                subtitle.textContent = product.description;
+                subtitle.textContent = product.data.description;
                 about.appendChild(name);
                 about.appendChild(subtitle);
 
@@ -128,12 +159,14 @@
                 const minusBtn = document.createElement('b');
                 minusBtn.classList.add('btn');
                 minusBtn.textContent = '-';
+                minusBtn.onclick = ()=>{changeQuantity(product.data._id, product.quantity-1)}
                 const count = document.createElement('div');
                 count.classList.add('count');
-                count.textContent = '1';
+                count.textContent = product.quantity;
                 const plusBtn = document.createElement('b');
                 plusBtn.classList.add('btn');
                 plusBtn.textContent = '+';
+                plusBtn.onclick = ()=>{changeQuantity(product.data._id, product.quantity+1)}
                 counter.appendChild(minusBtn)
                 counter.appendChild(count)
                 counter.appendChild(plusBtn)
@@ -142,7 +175,7 @@
                 prices.classList.add('prices');
                 const amount = document.createElement('div');
                 amount.classList.add('amount');
-                amount.textContent = product.price + ' RON';
+                amount.textContent = product.data.price + ' RON';
                 const save = document.createElement('div');
                 save.classList.add('save');
                 save.textContent = 'Add to favorites';
@@ -150,7 +183,7 @@
                 remove.classList.add('remove');
                 remove.textContent = 'Remove';
                 remove.onclick = function(){
-                    removeFromCart(product._id)
+                    removeFromCart(product.data._id)
                 }
                 prices.appendChild(amount)
                 prices.appendChild(save)

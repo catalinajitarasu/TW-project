@@ -10,6 +10,7 @@ module.exports = [
     { path: '/login', method: 'POST', controller: userController.logIn },
     { path: '/sign-up', method: 'POST', controller: userController.signUp },
     { path: '/user/update', method: 'PATCH', controller: userController.updateUser },
+    { path: '/user/cart/change-quantity', method: 'PATCH', controller: userController.changeProdQuantity},
     { path: '/user/cart/remove', method: 'DELETE', controller: userController.removeCartProduct},
     { path: '/user/cart/empty', method: 'DELETE', controller: userController.emptyCart},
     { path: '/user/favorites/remove', method: 'DELETE', controller: userController.removeFavoritesProduct},

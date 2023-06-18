@@ -154,7 +154,7 @@ exports.getUserCart = async (req, res) => {
     const queryParams = querystring.parse(parsedUrl.query)
     console.log(queryParams)
 
-    let user = await User.findOne({email: queryParams.userEmail}).populate('cart')
+    let user = await User.findOne({email: queryParams.userEmail}).populate('cart.data')
     if(user === undefined || user === null){
         res.statusCode=404
         res.statusMessage="User not found!"
@@ -205,6 +205,46 @@ exports.emptyCart = async (req, res) => {
 
 };
 
+exports.changeProdQuantity = async (req, res) => {
+  let body = '';
+  req.on('data', (chunk) => {
+    body +=chunk.toString();
+  });
+  req.on('end', async () => {
+  const data = JSON.parse(body)
+    try{
+      console.log(data)
+      let user = await User.findOne({email: data.userEmail})
+      if(user === undefined || user === null){
+          res.statusCode=404
+          res.statusMessage="User not found!"
+          res.end()
+          return
+      }
+
+      if(data.quantity > 0){
+        user.cart.forEach(product =>{
+          if(product.data.toString() == data.productId.toString()){
+            product.quantity = data.quantity
+          }
+        })
+      }
+      else{
+        user.cart = user.cart.filter(product => product.data.toString() !== data.productId.toString())
+      }
+      await user.save()
+
+      res.end(JSON.stringify({message: 'Cart updated'}));
+    }
+    catch(error){
+      console.log(error)
+      res.statusCode = 500;
+      res.end();
+    }
+  });
+
+};
+
 exports.removeCartProduct = async (req, res) => {
   let body = '';
   req.on('data', (chunk) => {
@@ -222,7 +262,7 @@ exports.removeCartProduct = async (req, res) => {
           return
       }
 
-      const newCart = user.cart.filter(productId => productId.toString() !== data.productId.toString())
+      const newCart = user.cart.filter(product => product.data.toString() !== data.productId.toString())
       user.cart = newCart
       console.log("FINAL USER")
       console.log(user.cart)
