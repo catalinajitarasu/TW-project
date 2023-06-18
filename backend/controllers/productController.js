@@ -157,12 +157,16 @@ exports.addToFavorites = async (req, res) => {
       }
       // console.log(user)
       user = user[0]
-      console.log(user.favorites)
-      const newFavorites = new Set(user.favorites)
-      console.log(newFavorites)
-      newFavorites.add(product._id)
-      console.log(newFavorites)
-      user.favorites = Array.from(newFavorites)
+      let foundProduct = false
+      user.favorites.forEach(oldProduct =>{
+        if(oldProduct.toString() === product._id.toString()){
+          foundProduct = true
+        }
+      })
+
+      if(!foundProduct){
+          user.favorites.push(product._id)
+      }
 
       const response = await user.save()
       // console.log(`response ${response}`)
