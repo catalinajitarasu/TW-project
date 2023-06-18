@@ -16,9 +16,9 @@
             <li> <a href="home-page.html">Home</a></li>
             <li> <a href="add-prod.html">Add a new product</a></li>
             <li class="search-box" >
-                <input class="search-txt" type="text" name="name" placeholder="Type to search">
-                <a class="search-btn" href="#"><img src="search-btn.png" alt="btn"></a>
-            </li>
+              <input class="search-txt" type="text" name="name" placeholder="Type to search">
+              <a class="search-btn" href="#"><img src="search-btn.png" alt="btn"></a>
+          </li>
             <div class="dropdown">
                 <select class="select" id="type">
                   <option value="">Select type of the products</option>
@@ -45,44 +45,52 @@
 
 <script>
 		const searchBtn = document.querySelector('.search-btn');
-    const menuContainer = document.querySelector('.menu-container');
     const menuPreview = document.querySelector('.menu-preview');
-    const noResultsMsg = document.querySelector('.no-results-msg');
     const searchInput = document.querySelector('.search-txt');
+    
+    const selectType = document.getElementById('type');
+    const menuContainer = document.querySelector('.menu-container');
+    const noResultsMsg = document.createElement('p');
+    noResultsMsg.classList.add('no-results-msg');
+    noResultsMsg.style.display = 'none';
+    noResultsMsg.textContent = 'No products found in this category.';
 
-    searchBtn.addEventListener('click', searchProducts);
-    searchInput.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        searchProducts();
-      }
-    });
+    selectType.addEventListener('change', fetchProductsByType);
 
-    function searchProducts() {
-      const searchTerm = searchInput.value.toLowerCase();
+    function fetchProductsByType() {
+      const selectedType = selectType.value;
       menuContainer.innerHTML = '';
-      menuPreview.innerHTML = '';
-      noResultsMsg.style.display = 'none';
+      menuContainer.appendChild(noResultsMsg);
 
-      fetch(`/products/by-name?name=${searchTerm}`)
+      if (selectedType === '') {
+        return;
+      }
+      console.log(selectType);
+
+      fetch(`http://localhost:8000/products/by-type?type=${selectedType}`)
         .then(response => response.json())
-        .then(matchingProducts => {
-          console.log('Matching Products:', matchingProducts);
+        .then(products => {
+          console.log('Products filtered by type:', products);
 
-          if (matchingProducts.length === 0) {
+          if (products.length === 0) {
             noResultsMsg.style.display = 'block';
           } else {
-            matchingProducts.forEach(product => {
+            noResultsMsg.style.display = 'none';
+
+            products.forEach(product => {
               const menuDiv = document.createElement('div');
               menuDiv.classList.add('menu');
               menuDiv.dataset.name = product.name;
 
               const img = document.createElement('img');
-              img.src = product.image;
+              img.src = product.photo;
               img.alt = '';
 
               const heading = document.createElement('h3');
               heading.textContent = product.name;
+
+              const description = document.createElement('p');
+              description.textContent = product.description;
 
               const price = document.createElement('div');
               price.classList.add('price');
@@ -90,45 +98,10 @@
 
               menuDiv.appendChild(img);
               menuDiv.appendChild(heading);
+              menuDiv.appendChild(description);
               menuDiv.appendChild(price);
 
               menuContainer.appendChild(menuDiv);
-
-              const previewDiv = document.createElement('div');
-              previewDiv.classList.add('preview');
-              previewDiv.dataset.target = product.name;
-
-              const closeButton = document.createElement('button');
-              closeButton.classList.add('close-button');
-              closeButton.innerHTML = '&times;';
-
-              const previewImg = document.createElement('img');
-              previewImg.src = product.image;
-              previewImg.alt = '';
-
-              const previewHeading = document.createElement('h3');
-              previewHeading.textContent = product.name;
-
-              const previewDescription = document.createElement('p');
-              previewDescription.textContent = product.description;
-
-              const previewPrice = document.createElement('div');
-              previewPrice.classList.add('price');
-              previewPrice.textContent = product.price;
-
-              const addToCartLink = document.createElement('a');
-              addToCartLink.classList.add('buy');
-              addToCartLink.href = '#';
-              addToCartLink.textContent = 'Add to cart';
-
-              previewDiv.appendChild(closeButton);
-              previewDiv.appendChild(previewImg);
-              previewDiv.appendChild(previewHeading);
-              previewDiv.appendChild(previewDescription);
-              previewDiv.appendChild(previewPrice);
-              previewDiv.appendChild(addToCartLink);
-
-              menuPreview.appendChild(previewDiv);
             });
           }
         })
@@ -136,6 +109,63 @@
           console.log('Error:', error);
         });
     }
+
+    const searchForm = document.querySelector('.search-box');
+    searchForm.addEventListener('submit', searchProductsByName);
+
+
+
+    function searchProductsByName(event) {
+        event.preventDefault();
+        const nameInput = searchForm.querySelector('.search-txt');
+        const name = nameInput.value;
+
+        fetch(`http://localhost:8000/products/by-name?name=${name}`)
+            .then(response => response.json())
+            .then(products => {
+                console.log('Products filtered by name:', products);
+
+                menuContainer.innerHTML = '';
+
+                if (products.length === 0) {
+                    noResultsMsg.style.display = 'block';
+                } else {
+                    noResultsMsg.style.display = 'none';
+
+                    products.forEach(product => {
+                        const menuDiv = document.createElement('div');
+                        menuDiv.classList.add('menu');
+                        menuDiv.dataset.name = product.name;
+
+                        const img = document.createElement('img');
+                        img.src = product.photo;
+                        img.alt = '';
+
+                        const heading = document.createElement('h3');
+                        heading.textContent = product.name;
+
+                        const description = document.createElement('p');
+                        description.textContent = product.description;
+
+                        const price = document.createElement('div');
+                        price.classList.add('price');
+                        price.textContent = product.price;
+
+                        menuDiv.appendChild(img);
+                        menuDiv.appendChild(heading);
+                        menuDiv.appendChild(description);
+                        menuDiv.appendChild(price);
+
+                        menuContainer.appendChild(menuDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                console.log('Error:', error);
+            });
+    }
+
+
 	</script>
 </body>
 </html>

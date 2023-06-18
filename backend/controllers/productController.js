@@ -171,11 +171,11 @@ exports.getProducts = async (req, res) => {
 
 exports.getProductsByType = async (req, res) => {
   try {
-    const type = req.query?.type; 
-    console.log('Query param - type:', type); 
-
+    const parsedUrl = url.parse(req.url);
+    const queryParams = querystring.parse(parsedUrl.query);
+    const type = queryParams.type; 
+    console.log('Query param - type:', queryParams.type);
     const products = await Product.find({ type: type }); 
-
     console.log('Products filtered by type:', products);
 
     res.setHeader('Content-Type', 'application/json');
@@ -191,31 +191,20 @@ exports.getProductsByType = async (req, res) => {
 
 
 
+
 exports.getProductByName = async (req, res) => {
   try {
-    const name = req.query?.name; 
-    console.log('Query param - name:', name); 
+    const parsedUrl = url.parse(req.url);
+    const queryParams = querystring.parse(parsedUrl.query);
+    const name = queryParams.name; 
+    console.log('Query param - name:', queryParams.name);
 
-    if (!name) {
-      res.setHeader('Content-Type', 'application/json');
-      res.statusCode = 400;
-      res.end(JSON.stringify({ error: 'Numele produsului lipsește în cererea de căutare.' }));
-      return;
-    }
+    const products = await Product.find({ name: name }); 
+    console.log('Products filtered by name:', products);
 
-    const product = await Product.findOne({ name: name });
-
-    if (product) {
-      console.log('Product found:', product); 
-      res.setHeader('Content-Type', 'application/json');
-      res.statusCode = 200;
-      res.end(JSON.stringify(product));
-    } else {
-      console.log('Product not found.'); 
-      res.setHeader('Content-Type', 'application/json');
-      res.statusCode = 404;
-      res.end(JSON.stringify({ error: 'Produsul nu a fost găsit.' }));
-    }
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 200;
+    res.end(JSON.stringify(products));
   } catch (error) {
     console.log(error);
     res.setHeader('Content-Type', 'application/json');
