@@ -32,10 +32,10 @@
                 <ul class="menuu">
                     <li>All products</li>
                     <li>Favorites products</li>
-                    <li>The most bought products</li>
+                   
                 </ul>
             </div>
-            <button id="downloadBtn">Download</button>
+            <!-- <button id="downloadBtn">Download</button> -->
         </ul>
     </div>
     <div class="container">
@@ -77,50 +77,53 @@ dropdowns.forEach(dropdown => {
         const statisticsOptions = document.querySelectorAll('.menuu li');
         const userEmail = JSON.parse(localStorage.getItem('userData')).email;
 
-        downloadBtn.addEventListener('click', function() {
-            const selectedOption = document.querySelector('.menuu li.active');
-            const format = selectedOption.dataset.format;
-            const selectedStatistics = document.querySelector('.menuu li.active').innerText
-                .toLowerCase()
-                .replace(/\s/g, "_")
-                .replace(/-/g, "");
-            let downloadUrl, fileName;
+        // downloadBtn.addEventListener('click', function() {
+        //     const selectedOption = document.querySelector('.menuu li.active');
+        //     const format = selectedOption.dataset.format;
+        //     const selectedStatistics = document.querySelector('.menuu li.active').innerText
+        //         .toLowerCase()
+        //         .replace(/\s/g, "_")
+        //         .replace(/-/g, "");
+        //     let downloadUrl, fileName;
 
-            if (selectedStatistics === "all_products") {
-                downloadUrl = `http://localhost:8000/downloadAllProducts-${format}`;
-                fileName = `all_products_report.${format}`;
-            } 
-            else if(selectedStatistics === "favorites_products") {
-                downloadUrl = `http://localhost:8000/downloadFavoritesProducts-${format}?userEmail=${userEmail}`;
-                fileName = `favorites_products_report.${format}`;
-            }
-            //    else {
-            //     downloadUrl = `http://localhost:8000/download${selectedStatistics}-${format}`;
-            //     fileName = `${selectedStatistics}_report.${format}`;
-            // }
+        //     if (selectedStatistics === "all_products") {
+        //         downloadUrl = `http://localhost:8000/downloadAllProducts-${format}`;
+        //         fileName = `all_products_report.${format}`;
+        //     } 
+        //     else if(selectedStatistics === "favorites_products") {
+        //         downloadUrl = `http://localhost:8000/downloadFavoritesProducts-${format}?userEmail=${userEmail}`;
+        //         console.log('User email:', userEmail);
+        //         fileName = `favorites_products_report.${format}`;
 
-            fetch(downloadUrl)
-                .then(response => {
-                    if (response.ok) {
-                        return response.blob();
-                    } else {
-                        throw new Error(`A apărut o eroare la descărcarea fișierului ${format.toUpperCase()}.`);
-                    }
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = fileName;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                })
-                .catch(error => {
-                    console.error(`Eroare la descărcarea fișierului ${format.toUpperCase()}:`, error);
-                });
-        });
+        //     }
+
+        //     // console.log(selectedStatistics);
+        //     // console.log(statisticsOptions);
+        //     // console.log(userEmail);
+        //     // console.log(downloadUrl);
+
+        //     fetch(downloadUrl)
+        //         .then(response => {
+        //             if (response.ok) {
+        //                 return response.blob();
+        //             } else {
+        //                 throw new Error(`A apărut o eroare la descărcarea fișierului ${format.toUpperCase()}.`);
+        //             }
+        //         })
+        //         .then(blob => {
+        //             const url = window.URL.createObjectURL(blob);
+        //             const a = document.createElement('a');
+        //             a.href = url;
+        //             a.download = fileName;
+        //             document.body.appendChild(a);
+        //             a.click();
+        //             document.body.removeChild(a);
+        //             window.URL.revokeObjectURL(url);
+        //         })
+        //         .catch(error => {
+        //             console.error(`Eroare la descărcarea fișierului ${format.toUpperCase()}:`, error);
+        //         });
+        // });
 
         statisticsOptions.forEach(option => {
             option.addEventListener('click', () => {
@@ -135,13 +138,14 @@ dropdowns.forEach(dropdown => {
                 } 
                 else if(selectedStatistics === "favorites_products") {
                 downloadUrl = `http://localhost:8000/downloadFavoritesProducts-${format}?userEmail=${userEmail}`;
+                console.log('User email:', userEmail);
                 fileName = `favorites_products_report.${format}`;
 
             }
-                // else {
-                //     downloadUrl = `http://localhost:8000/download${selectedStatistics}-${format}`;
-                //     fileName = `${selectedStatistics}_report.${format}`;
-                // }
+            console.log(selectedStatistics);
+            console.log(statisticsOptions);
+            console.log(userEmail);
+            console.log(downloadUrl);
 
                 fetch(downloadUrl)
                     .then(response => {
