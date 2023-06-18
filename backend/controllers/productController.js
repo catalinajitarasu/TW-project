@@ -3,6 +3,8 @@ const User = require('../models/userModel');
 const fs = require('fs');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const PDFDocument = require('pdfkit');
+const querystring = require('querystring');
+const url = require('url');
 
 exports.generateProductCSV = async (req, res) => {
   try {
@@ -305,9 +307,10 @@ exports.generateProductPDF = async (req, res) => {
 
 exports.generateUserFavoritesPDF = async (req, res) => {
     try {
-      const userEmail = req.query.userEmail; // Extrage adresa de email din URL
-      console.log('User email:', userEmail);
-      let user = await User.findOne({ email: userEmail });
+      const parsedUrl = url.parse(req.url);
+      const queryParams = querystring.parse(parsedUrl.query)
+      console.log('User email:', queryParams.userEmail);
+      let user = await User.findOne({ email: queryParams.userEmail });
 
       if (!user) {
         res.setHeader('Content-Type', 'application/json');

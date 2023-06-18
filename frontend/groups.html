@@ -14,17 +14,45 @@
         </div>
         <ul>
             <li> <a href="home-page.html">Home</a></li>
-            <li class="dropdown">
+            <div class="dropdown">
                 <div class="select">
-                    <span class="selected">Select a group</span>
+                    <span class="selected">Choose allergies</span>
                     <div class="caret"></div>
                 </div>
                 <ul class="menuu">
-                    <li>People with gluten intolerance</li>
-                    <li>Chocolate lovers</li>
-                    <li>Eat as healthy as possible</li>
+                    <li allergy="any">any</li>
+                    <li allergy="gluten">gluten</li>
+                    <li allergy="lactose">lactose</li>
+                    <li allergy="peanuts">peanuts</li>
+                    <li allergy="shellfish">shellfish</li>
+                    <li allergy="soy">soy</li>
+                    <li allergy="wheat">wheat</li>
+                    <li allergy="eggs">eggs</li>
+                    <li allergy="fish">fish</li>
                 </ul>
-            </li>
+            </div>
+            <div class="dropdown">
+                <div class="select">
+                    <span class="selected">Preferences</span>
+                    <div class="caret"></div>
+                </div>
+                <ul class="menuu">
+                    <li>Italian</li>
+                    <li>Italian</li>
+                    <li>Asian</li>
+                    <li>Mexican</li>
+                    <li>French</li>
+                    <li>Indian</li>
+                    <li>Mediterranean</li>
+                    <li>Spanish</li>
+                    <li>American</li>
+                    <li>British</li>
+                    <li>African</li>
+                    <li>Turkish</li>
+                    <li>Lebanese</li>
+                </ul>
+            </div>
+            <button id="downloadBtn">Download</button>
         </ul>
     </div>
     <div class="container">
