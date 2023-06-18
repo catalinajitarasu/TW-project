@@ -49,8 +49,14 @@ const userSchema = new Schema({
         type: String,
     }],
     cart:[{
-        type: mongoose.Types.ObjectId,
-        ref: 'Product'
+        data:{
+            type: mongoose.Types.ObjectId,
+            ref: 'Product'
+        },
+        quantity: {
+            type: Number,
+            default: 1
+        }
     }],
     favorites:[{
         type: mongoose.Types.ObjectId,

@@ -90,7 +90,7 @@ exports.addToCart = async (req, res) => {
           res.end()
           return
         }
-        let user = await User.find({email: data.userEmail});
+        let user = await User.find({email: data.userEmail})
         if(user === undefined || user === null){
           res.statusCode=404
           res.statusMessage="User not found!"
@@ -99,11 +99,29 @@ exports.addToCart = async (req, res) => {
         }
         console.log(user)
         user = user[0]
-        user.cart.push(product._id)
-        console.log(2)
+        let foundProduct = false
+        user.cart.forEach(oldProduct =>{
+          console.log(oldProduct.data.toString())
+          console.log(product._id.toString())
+          console.log("\n")
+          if(oldProduct.data.toString() === product._id.toString()){
+            oldProduct.quantity +=1
+            foundProduct = true
+          }
+
+        })
+
+        if(!foundProduct){
+            user.cart.push({data: product._id})
+        }
+        // if(!user.cart.includes(oldProduct=> oldProduct.data.toString() === product._id.toString())){
+
+        //   console.log("NEW PRODUCT")
+        //   user.cart.push({data: product._id})
+        // }
 
         const response = await user.save()
-        console.log(`response ${response}`)
+        // console.log(`response ${response}`)
         res.status=201;
         res.end(JSON.stringify(response));
       } catch (error) {
@@ -137,13 +155,21 @@ exports.addToFavorites = async (req, res) => {
         res.end()
         return
       }
-      console.log(user)
+      // console.log(user)
       user = user[0]
-      user.favorites.push(product._id)
-      console.log(2)
+      let foundProduct = false
+      user.favorites.forEach(oldProduct =>{
+        if(oldProduct.toString() === product._id.toString()){
+          foundProduct = true
+        }
+      })
+
+      if(!foundProduct){
+          user.favorites.push(product._id)
+      }
 
       const response = await user.save()
-      console.log(`response ${response}`)
+      // console.log(`response ${response}`)
       res.status=201;
       res.end(JSON.stringify(response));
     } catch (error) {
@@ -156,7 +182,56 @@ exports.addToFavorites = async (req, res) => {
 
 exports.getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    // const name = req.query?.name; 
+    // console.log('Query param - name:', name); 
+
+    
+    // if (typeof name !== 'undefined') {
+      //   console.log('Performing search by name...');
+      //   products = await Product.find({ name: name });
+      // } else {
+        // }
+    let products;
+    console.log('Getting all products...');
+    const parsedUrl = url.parse(req.url);
+    const queryParams = querystring.parse(parsedUrl.query)
+    console.log(queryParams.allergy)
+    console.log(queryParams.preference)
+    if(queryParams.allergy !== undefined && queryParams.preference !== undefined){
+      console.log('Case 1: ')
+      console.log(queryParams)
+      let users = await User.find()
+      // console.log(users)
+      if(queryParams.allergy !== 'Any'){
+        console.log("Fillter by allergy")
+        users = users.filter(user => user.allergies.includes(queryParams.allergy.toLowerCase()))
+      }
+      if(queryParams.preference !== 'Any'){
+        console.log("Fillter by preference")
+        console.log(users)
+        users = users.filter(user => user.preferences.includes(queryParams.preference))
+        console.log(users)
+      }
+      
+      console.log(users)
+      let uniqueFavorites = new Set();
+      users.forEach(user => {
+        user.favorites.forEach(favorite => {
+          uniqueFavorites.add(favorite);
+        });
+      });
+
+      uniqueFavorites = Array.from(uniqueFavorites)
+
+      products = await Product.find({'_id': {$in: uniqueFavorites}})
+    }
+    else{
+      console.log("Case 2")
+      products = await Product.find();
+    }
+
+    // console.log('Products:', products); 
+
     res.setHeader('Content-Type', 'application/json');
     res.statusCode = 200;
     res.end(JSON.stringify(products));
