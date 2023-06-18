@@ -14,8 +14,6 @@
         }
 
         function addToCart( product){
-            // var buyButton = document.getElementById("buyBtn");
-            // event.preventDefault()
             console.log(product)
             fetch("http://localhost:8000/products/add-to-cart", {
                     method: "POST",
@@ -37,12 +35,10 @@
                     }
                 }).then(data => {
                     console.log(data);
-                    // window.location.href ='../home-page.html'
                     var currentPath = window.location.pathname;
             var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'shopping-list.html';
             window.location.href = newPath;
                 }).catch(error => {
-                    // alert('Failed to contact the server')
                     console.error("Error:", error);
                     return false;
                 });
@@ -71,12 +67,10 @@
                     }
                 }).then(data => {
                     console.log(data);
-                    // window.location.href ='../home-page.html'
                     var currentPath = window.location.pathname;
                     var newPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1) + 'fav-list.html';
                     window.location.href = newPath;
                 }).catch(error => {
-                    // alert('Failed to contact the server')
                     console.error("Error:", error);
                     return false;
                 });
@@ -88,101 +82,78 @@
                 .then(data => {
                     console.log("Data received:", data);
                     
-                    // Parcurgem fiecare produs din răspunsul primit
+                    
                     data.forEach(product => {
-                        // Crearea div-ului pentru produsul din menu-container
                         var menuDiv = document.createElement("div");
                         menuDiv.className = "menu";
                         menuDiv.setAttribute("data-name", product._id);
 
-                        // Adăugarea imaginii
                         var img = document.createElement("img");
                         img.src = product.photo;
                         img.alt = product.name;
                         menuDiv.appendChild(img);
 
-                        // Adăugarea numelui
                         var name = document.createElement("h3");
                         name.textContent = product.name;
                         menuDiv.appendChild(name);
 
-                        // Adăugarea prețului
                         var price = document.createElement("div");
                         price.className = "price";
                         price.textContent = product.price + " lei";
                         menuDiv.appendChild(price);
 
-                        // Adăugarea produsului în containerul menu-container
                         document.querySelector(".menu-container").appendChild(menuDiv);
 
-                        // Cream elementele HTML corespunzătoare pentru fiecare produs și adăugam în containerul menu-preview
-
-                        // Crearea div-ului pentru produsul din menu-preview
                         var previewDiv = document.createElement("div");
                         previewDiv.className = "preview";
                         previewDiv.setAttribute("data-target", product._id);
 
-                        // Adăugarea butonului de închidere
                         var closeButton = document.createElement("button");
                         closeButton.className = "close-button";
                         closeButton.innerHTML = "&times;";
                         previewDiv.appendChild(closeButton);
 
-                        // Adăugarea imaginii
                         var imgPreview = document.createElement("img");
                         imgPreview.src = product.photo;
                         imgPreview.alt = product.name;
                         previewDiv.appendChild(imgPreview);
 
-                        // Adăugarea numelui
                         var namePreview = document.createElement("h3");
                         namePreview.textContent = product.name;
                         previewDiv.appendChild(namePreview);
 
-                        // Adăugarea descrierii
                         var description = document.createElement("p");
                         description.textContent = product.description;
                         previewDiv.appendChild(description);
 
-                        // Adăugarea prețului
                         var pricePreview = document.createElement("div");
                         pricePreview.className = "price";
                         pricePreview.textContent = product.price + " lei";
                         previewDiv.appendChild(pricePreview);
 
-                        // Adăugarea tipului
                         var typePreview = document.createElement("p");
                         typePreview.textContent = product.type;
                         previewDiv.appendChild(typePreview);
 
-                        // Adăugarea link-ului de adăugare în coș
                         var buyButton = document.createElement("button");
                         buyButton.onclick = function() {
                             addToCart(product);
                             };
-                        // buyButton.id = "buyBtn";
                         buyButton.className = "favorite-button";
                         buyButton.textContent = "Add to cart";
                         previewDiv.appendChild(buyButton);
 
-                        //Adaugarea butonului pentru adaugare la favorite
                         var favButton = document.createElement("button");
-                        // favButton.className = "favorite-button";
-                        // favButton.textContent = "Add to favorites";
-                        // previewDiv.appendChild(favButton);
                         favButton.onclick = function() {
                             addToFavorites(product);
                             };
-                        // buyButton.id = "buyBtn";
                         favButton.className = "favorite-button";
                         favButton.textContent = "Add to favorite";
                         previewDiv.appendChild(favButton);
 
-                        // Adăugarea produsului în containerul menu-preview
                         document.querySelector(".menu-preview").appendChild(previewDiv);
                     });
 
-                    // Adăugarea evenimentului de clic pentru elementele de previzualizare
                     let previewMenu = document.querySelector('.menu-preview');
                     let previewBox = previewMenu.querySelectorAll('.preview');
 
@@ -209,56 +180,6 @@
                     console.error("Error:", error);
                 });
 
-            //pentru butonul de cautare dupa nume..... nu prea merge
-            var searchForm = document.querySelector(".search-box");
-            searchForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-                var searchInput = document.querySelector(".search-txt").value;
-
-                fetch("http://localhost:8000/products?name=" + encodeURIComponent(searchInput))
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Search results:", data);
-
-                        // Ștergem produsele existente din container
-                        document.querySelector(".menu-container").innerHTML = "";
-
-                        // Verificăm dacă s-au găsit produse
-                        if (data.length === 0) {
-                            // Produsul nu a fost găsit, afișăm mesajul corespunzător
-                            var messageDiv = document.createElement("div");
-                            messageDiv.className = "search-message";
-                            messageDiv.textContent = "Produsul cautat nu a fost gasit";
-                            document.querySelector(".menu-container").appendChild(messageDiv);
-                        } else {
-                            // Parcurgem fiecare produs găsit și le adăugăm în containerul menu-container
-                            data.forEach(product => {
-                                var menuDiv = document.createElement("div");
-                                menuDiv.className = "menu";
-                                menuDiv.setAttribute("data-name", product._id);
-
-                                var img = document.createElement("img");
-                                img.src = product.photo;
-                                img.alt = product.name;
-                                menuDiv.appendChild(img);
-
-                                var name = document.createElement("h3");
-                                name.textContent = product.name;
-                                menuDiv.appendChild(name);
-
-                                var price = document.createElement("div");
-                                price.className = "price";
-                                price.textContent = product.price + " lei";
-                                menuDiv.appendChild(price);
-
-                                document.querySelector(".menu-container").appendChild(menuDiv);
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                    });
-            });
 
             // Adăugarea evenimentului de clic pentru butonul de închidere
             document.querySelectorAll('.menu-preview .preview .close-button').forEach(button => {
@@ -284,13 +205,7 @@
             <li> <a href="download.html">Statistics</a></li>
             <li> <a href="user/settings.html">Settings</a></li>
             <li> <a> <button onclick="logout()">Log out</button></a></li>
-            <!-- <li> <a href="landing.html">Log-out</a></li> -->
-            <li>
-                <form class="search-box">
-                    <input class="search-txt" type="text" name="name" placeholder="Type a product">
-                    <button class="search-btn" type="submit"><img src="search-btn.png" alt="btn"></button>
-                </form>
-            </li>
+           
         </ul>
     </div>
     
