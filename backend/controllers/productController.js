@@ -11,7 +11,6 @@ exports.generateProductCSV = async (req, res) => {
     const products = await Product.find();
     console.log('Produse găsite:', products);
 
-    // Generare fișier CSV
     const csvWriter = createCsvWriter({
       path: 'product_report.csv',
       header: [
@@ -24,7 +23,6 @@ exports.generateProductCSV = async (req, res) => {
 
     await csvWriter.writeRecords(products);
 
-    // Descărcare fișier CSV
     res.setHeader('Content-Type', 'text/csv');
     res.setHeader('Content-Disposition', 'attachment; filename="product_report.csv"');
 
@@ -32,7 +30,6 @@ exports.generateProductCSV = async (req, res) => {
     fileStream.pipe(res);
 
     fileStream.on('end', () => {
-      // Șterge fișierul după ce a fost trimis cu succes
       fs.unlink('product_report.csv', (err) => {
         if (err) {
           console.error('Eroare la ștergerea fișierului CSV:', err);
@@ -179,20 +176,6 @@ exports.addToFavorites = async (req, res) => {
 });
 };
 
-// exports.getProducts = async (req, res) => {
-//   try {
-//     const products = await Product.find();
-//     res.setHeader('Content-Type', 'application/json');
-//     res.statusCode = 200;
-//     res.end(JSON.stringify(products));
-//   } catch (error) {
-//     console.log(error);
-//     res.setHeader('Content-Type', 'application/json');
-//     res.statusCode = 500;
-//     res.end(JSON.stringify({ error: 'Internal Server Error' }));
-//   }
-// };
-
 exports.getProducts = async (req, res) => {
   try {
     // const name = req.query?.name; 
@@ -259,12 +242,12 @@ exports.getProducts = async (req, res) => {
 
 exports.getProductsByType = async (req, res) => {
   try {
-    const type = req.query?.type; // Obține parametrul de query string "type"
-    console.log('Query param - type:', type); // Adaugă acest console.log
+    const type = req.query?.type; 
+    console.log('Query param - type:', type); 
 
-    const products = await Product.find({ type: type }); // Filtrare după tip
+    const products = await Product.find({ type: type }); 
 
-    console.log('Products filtered by type:', products); // Adaugă acest console.log
+    console.log('Products filtered by type:', products);
 
     res.setHeader('Content-Type', 'application/json');
     res.statusCode = 200;
@@ -281,8 +264,8 @@ exports.getProductsByType = async (req, res) => {
 
 exports.getProductByName = async (req, res) => {
   try {
-    const name = req.query?.name; // Obține parametrul de query string "name"
-    console.log('Query param - name:', name); // Adaugă acest console.log
+    const name = req.query?.name; 
+    console.log('Query param - name:', name); 
 
     if (!name) {
       res.setHeader('Content-Type', 'application/json');
@@ -294,12 +277,12 @@ exports.getProductByName = async (req, res) => {
     const product = await Product.findOne({ name: name });
 
     if (product) {
-      console.log('Product found:', product); // Adaugă acest console.log
+      console.log('Product found:', product); 
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 200;
       res.end(JSON.stringify(product));
     } else {
-      console.log('Product not found.'); // Adaugă acest console.log
+      console.log('Product not found.'); 
       res.setHeader('Content-Type', 'application/json');
       res.statusCode = 404;
       res.end(JSON.stringify({ error: 'Produsul nu a fost găsit.' }));
@@ -406,5 +389,63 @@ exports.generateUserFavoritesPDF = async (req, res) => {
       res.statusCode = 500;
       res.end();
     }
+};
+
+
+exports.generateUserFavoritesCSV = async (req, res) => {
+  try {
+    const parsedUrl = url.parse(req.url);
+    const queryParams = querystring.parse(parsedUrl.query)
+    console.log('User email:', queryParams.userEmail);
+    let user = await User.findOne({ email: queryParams.userEmail });
+
+    if (!user) {
+      res.setHeader('Content-Type', 'application/json');
+      res.statusCode = 404;
+      res.end(JSON.stringify({ error: 'Utilizatorul nu a fost găsit.' }));
+      return;
+    }
+
+    const favoriteProducts = await Product.find({ _id: { $in: user.favorites } });
+
+    console.log('Favorite products:', favoriteProducts);
+
+    const csvWriter = createCsvWriter({
+      path: 'user_favorites.csv',
+      header: [
+        { id: 'name', title: 'Name' },
+        { id: 'description', title: 'Description' },
+        { id: 'price', title: 'Price' },
+        { id: 'type', title: 'Type' },
+      ],
+    });
+
+    await csvWriter.writeRecords(favoriteProducts);
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="user_favorites.csv"');
+
+    const fileStream = fs.createReadStream('user_favorites.csv');
+    fileStream.pipe(res);
+
+    fileStream.on('end', () => {
+      fs.unlink('user_favorites.csv', (err) => {
+        if (err) {
+          console.error('Eroare la ștergerea fișierului CSV:', err);
+        } else {
+          console.log('Fișierul CSV a fost șters cu succes.');
+        }
+      });
+    });
+
+    fileStream.on('error', (error) => {
+      console.error('Eroare la trimiterea fișierului CSV:', error);
+    });
+  } catch (error) {
+    console.error('Eroare la generarea fișierului CSV:', error);
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: 'Internal Server Error' }));
+  }
 };
 
