@@ -132,7 +132,7 @@
             const cartList = document.getElementById('cart-list');
             
             products.forEach(product => {
-                totalPayment += product.data.price
+                totalPayment += product.data.price * product.quantity
                 const productItem = document.createElement('div');
                 productItem.classList.add('cart-items', 'pad');
 
