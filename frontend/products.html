@@ -107,60 +107,6 @@
     }
 
     const searchForm = document.querySelector('.search-box');
-    searchForm.addEventListener('submit', searchProductsByName);
-
-
-
-    function searchProductsByName(event) {
-        event.preventDefault();
-        const nameInput = searchForm.querySelector('.search-txt');
-        const name = nameInput.value;
-
-        fetch(`http://localhost:8000/products/by-name?name=${name}`)
-            .then(response => response.json())
-            .then(products => {
-                console.log('Products filtered by name:', products);
-
-                menuContainer.innerHTML = '';
-
-                if (products.length === 0) {
-                    noResultsMsg.style.display = 'block';
-                } else {
-                    noResultsMsg.style.display = 'none';
-
-                    products.forEach(product => {
-                        const menuDiv = document.createElement('div');
-                        menuDiv.classList.add('menu');
-                        menuDiv.dataset.name = product.name;
-
-                        const img = document.createElement('img');
-                        img.src = product.photo;
-                        img.alt = '';
-
-                        const heading = document.createElement('h3');
-                        heading.textContent = product.name;
-
-                        const description = document.createElement('p');
-                        description.textContent = product.description;
-
-                        const price = document.createElement('div');
-                        price.classList.add('price');
-                        price.textContent = product.price;
-
-                        menuDiv.appendChild(img);
-                        menuDiv.appendChild(heading);
-                        menuDiv.appendChild(description);
-                        menuDiv.appendChild(price);
-
-                        menuContainer.appendChild(menuDiv);
-                    });
-                }
-            })
-            .catch(error => {
-                console.log('Error:', error);
-            });
-    }
-
 
 	</script>
 </body>
